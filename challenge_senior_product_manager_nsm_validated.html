@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Yape · Challenge Senior Product Manager – GPM Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+:root{
+  --purple:#7C3AED;--purple-dark:#4C1D95;--purple-mid:#6D28D9;
+  --accent:#A78BFA;--neon:#C4B5FD;--cyan:#67E8F9;
+  --bg:#09051A;--bg2:#110930;--bg3:#1C1040;
+  --border:rgba(167,139,250,0.2);--border2:rgba(167,139,250,0.4);
+  --text:#EDE9FE;--muted:#9B7EC8;--dim:#6B5F8A;
+  --green:#34D399;--red:#F87171;--amber:#FCD34D;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 20%, rgba(109,40,217,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(124,58,237,.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(103,232,249,.04) 0%, transparent 70%);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(124,58,237,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+}
+
+/* ── LAYOUT ── */
+#root{position:relative;z-index:1;min-height:100vh}
+.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem}
+.card{background:rgba(17,9,48,.85);border:1px solid var(--border2);border-radius:20px;backdrop-filter:blur(16px);padding:2.5rem;width:100%;max-width:760px;box-shadow:0 0 60px rgba(124,58,237,.12),0 0 0 1px rgba(167,139,250,.06) inset}
+.card-wide{max-width:900px}
+
+/* ── YAPE LOGO ── */
+.logo{font-family:var(--mono);font-size:2rem;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sm{font-size:1.1rem}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(124,58,237,.2);border:1px solid rgba(167,139,250,.3);border-radius:100px;padding:.25rem .75rem;font-size:.72rem;font-weight:600;color:var(--neon);letter-spacing:.06em;text-transform:uppercase}
+.badge-green{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.3);color:var(--green)}
+.badge-amber{background:rgba(252,211,77,.1);border-color:rgba(252,211,77,.3);color:var(--amber)}
+
+/* ── TYPOGRAPHY ── */
+h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.1;letter-spacing:-.03em}
+h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+.subtitle{color:var(--muted);font-size:1rem;line-height:1.6;margin-top:.5rem}
+.accent{color:var(--accent)}
+.cyan{color:var(--cyan)}
+.mono{font-family:var(--mono);font-size:.85rem}
+
+/* ── INPUTS ── */
+input[type=text],input[type=email]{
+  width:100%;background:rgba(28,16,64,.8);border:1px solid var(--border2);border-radius:10px;
+  padding:.85rem 1.1rem;color:var(--text);font-family:var(--sans);font-size:1rem;outline:none;
+  transition:border-color .2s,box-shadow .2s
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.15)}
+textarea.code-area{
+  width:100%;background:#0D0820;border:1px solid var(--border2);border-radius:10px;
+  padding:1rem;color:#E8D5FF;font-family:var(--mono);font-size:.82rem;line-height:1.7;
+  outline:none;resize:vertical;min-height:200px;
+  transition:border-color .2s,box-shadow .2s;tab-size:2
+}
+textarea.code-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
+textarea.prose-area{
+  width:100%;background:rgba(28,16,64,.8);border:1px solid var(--border2);border-radius:10px;
+  padding:1rem 1.2rem;color:var(--text);font-family:var(--sans);font-size:.95rem;line-height:1.7;
+  outline:none;resize:vertical;min-height:160px;transition:border-color .2s,box-shadow .2s
+}
+textarea.prose-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:10px;
+  padding:.8rem 1.6rem;font-family:var(--sans);font-size:.95rem;font-weight:600;
+  cursor:pointer;transition:all .18s;letter-spacing:.01em
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple-mid),var(--purple));color:#fff;
+  box-shadow:0 4px 20px rgba(109,40,217,.4)
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(109,40,217,.55)}
+.btn-primary:active{transform:translateY(0)}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--accent)}
+.btn-outline:hover{background:rgba(167,139,250,.08);border-color:var(--accent)}
+.btn-ghost{background:rgba(167,139,250,.06);border:1px solid transparent;color:var(--muted)}
+.btn-ghost:hover{background:rgba(167,139,250,.12);color:var(--text)}
+.btn-sm{padding:.5rem 1rem;font-size:.85rem;border-radius:8px}
+.btn-green{background:linear-gradient(135deg,#059669,#10B981);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,.3)}
+.btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.45)}
+
+/* ── PROGRESS ── */
+.progress-bar{width:100%;height:4px;background:rgba(167,139,250,.1);border-radius:100px;overflow:hidden;margin-bottom:2.5rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple-mid),var(--cyan));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.steps-row{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.step-chip{display:flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:600;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .2s}
+.step-chip.active{background:rgba(124,58,237,.2);border-color:var(--accent);color:var(--accent)}
+.step-chip.done{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3);color:var(--green)}
+
+/* ── SCHEMA TABLE ── */
+.schema-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.8rem;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.schema-table th{background:rgba(124,58,237,.2);color:var(--neon);padding:.6rem 1rem;text-align:left;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.72rem}
+.schema-table td{padding:.55rem 1rem;border-top:1px solid var(--border);color:var(--text)}
+.schema-table tr:hover td{background:rgba(167,139,250,.04)}
+.type-tag{display:inline-block;background:rgba(103,232,249,.1);color:var(--cyan);border-radius:4px;padding:.1rem .4rem;font-size:.72rem}
+
+/* ── SCENARIO CARDS ── */
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+@media(max-width:560px){.scenario-grid{grid-template-columns:1fr}}
+.scenario-card{border:1px solid var(--border);border-radius:14px;padding:1.25rem;background:rgba(28,16,64,.5)}
+.scenario-card.winner{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.04)}
+.scenario-card.loser{border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.03)}
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(167,139,250,.1)}
+.metric-row:last-child{border-bottom:none}
+.metric-label{color:var(--muted);font-size:.85rem}
+.metric-val{font-weight:700;font-size:.95rem}
+
+/* ── REPORT ── */
+.report-block{background:#0D0820;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1.5rem;font-family:var(--mono);font-size:.8rem;line-height:1.8;color:#D8B4FE;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow-y:auto}
+.report-section{margin-bottom:1rem}
+
+/* ── DEPLOY GUIDE ── */
+.deploy-step{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border:1px solid var(--border);border-radius:12px;background:rgba(28,16,64,.4)}
+.step-num{flex-shrink:0;width:32px;height:32px;background:linear-gradient(135deg,var(--purple-mid),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+.row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+.col{display:flex;flex-direction:column;gap:.75rem}
+.label{font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+.hint{font-size:.82rem;color:var(--dim);line-height:1.5;margin-top:.4rem}
+.saved-indicator{display:inline-flex;align-items:center;gap:.4rem;color:var(--green);font-size:.82rem;font-weight:600;opacity:0;transition:opacity .3s}
+.saved-indicator.show{opacity:1}
+.char-count{font-size:.75rem;color:var(--dim);text-align:right;margin-top:.3rem}
+.score-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--accent);background:rgba(124,58,237,.15)}
+.score-num{font-weight:700;font-size:1.2rem;color:var(--accent)}
+.score-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.animate-in{animation:fadeIn .4s ease both}
+.pulse{animation:pulse 2s ease infinite}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(167,139,250,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(167,139,250,.5)}
+
+/* ── SYNTAX HIGHLIGHT (simulated) ── */
+.keyword{color:#C084FC}
+.fn{color:#67E8F9}
+.string{color:#86EFAC}
+.comment{color:#6B7280;font-style:italic}
+.num{color:#FCD34D}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ── DATA ──────────────────────────────────────────────────────────────────
+const NSM_QUESTIONS = [
+  {
+    id: 'q1',
+    question: 'Caso: Yape quiere impulsar la vertical Promos. El equipo observa que el GMV crece, pero también aumentan los descuentos y la frecuencia de compra no mejora. ¿Cuál sería la mejor formulación de la North Star Metric?',
+    options: [
+      'GMV mensual total de Promos, porque resume el tamaño del negocio.',
+      'Número de usuarios que compran promos, porque mide adopción.',
+      'Número de usuarios que completan una compra de promo con valor percibido, de forma recurrente, porque conecta valor para usuario y crecimiento sostenible.',
+      'Monto total de descuentos otorgados, porque permite entender la inversión para generar crecimiento.'
+    ],
+    answer: 2,
+    rationale: 'Una buena NSM captura el valor central entregado al usuario y permite observar crecimiento sostenible; no debe reducirse a volumen financiero o una métrica de actividad aislada.'
+  },
+  {
+    id: 'q2',
+    question: 'El equipo propone como input de la NSM: "usuarios que vieron una promo", "usuarios que agregaron al carrito" y "usuarios que compraron". ¿Qué criterio usarías para decidir cuál es un input relevante del sistema de métricas?',
+    options: [
+      'Elegir el input con mayor volumen, porque tendrá mayor impacto estadístico.',
+      'Elegir el input que tenga una relación causal o predictiva consistente con la NSM y que el equipo pueda influenciar mediante producto.',
+      'Elegir todos los inputs por igual para evitar sesgos de priorización.',
+      'Elegir exclusivamente el input que el negocio pueda monetizar directamente.'
+    ],
+    answer: 1,
+    rationale: 'Los inputs deben explicar o movilizar la North Star y ser palancas accionables del producto; volumen o monetización por sí solos no bastan.'
+  },
+  {
+    id: 'q3',
+    question: 'Después de 2 meses, una iniciativa aumenta la NSM +12%, pero también genera un deterioro importante en reclamos y cancelaciones. Como Senior Product Manager, ¿qué conclusión es más adecuada?',
+    options: [
+      'La iniciativa es exitosa porque la NSM es la métrica principal y debe priorizarse sobre cualquier otra.',
+      'La iniciativa debe mantenerse sin cambios porque los guardrails se revisan solo trimestralmente.',
+      'La NSM muestra impacto positivo, pero el deterioro de guardrails obliga a investigar el trade-off antes de escalar; la decisión debe considerar valor de usuario y sostenibilidad.',
+      'La NSM deja de ser útil y debe reemplazarse por reclamos y cancelaciones.'
+    ],
+    answer: 2,
+    rationale: 'La NSM no reemplaza el resto del sistema de métricas. Los guardrails permiten detectar crecimiento que destruye valor o genera efectos secundarios no sostenibles.'
+  }
+];
+
+const SCENARIO_METRICS = [
+  { label: 'Precio al cliente',   a: 'S/ 100',      b: 'S/ 120 (3 cuotas)' },
+  { label: 'Cuota mensual',       a: '—',           b: 'S/ 40 / mes' },
+  { label: 'Tasa de conversión',  a: '↓ Baja',      b: '↑ Alta' },
+  { label: 'Ticket promedio',     a: 'S/ 100',      b: 'S/ 120' },
+  { label: 'Cobro inmediato',     a: 'S/ 100 hoy',  b: 'S/ 40 × 3 meses' },
+];
+
+const SQL_HINT = '';
+
+// ── COMPONENTS ────────────────────────────────────────────────────────────
+
+function ProgressHeader({ step, total, steps }) {
+  const pct = (step / total) * 100;
+  return (
+    <div style={{width:'100%',maxWidth:760,marginBottom:'1.5rem'}}>
+      <div className="progress-bar">
+        <div className="progress-fill" style={{width:`${pct}%`}}/>
+      </div>
+      <div className="steps-row">
+        {steps.map((s,i) => (
+          <div key={i} className={`step-chip ${i+1 < step ? 'done' : i+1 === step ? 'active' : ''}`}>
+            {i+1 < step ? '✓' : <span style={{fontFamily:'Space Mono',fontWeight:700,fontSize:'.72rem'}}>{i+1}</span>}
+            {s}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── SCREEN 1: Welcome ──────────────────────────────────────────────────────
+function WelcomeScreen({ onStart }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [shake, setShake] = useState(false);
+
+  const handleStart = () => {
+    if (!name.trim()) { setShake(true); setTimeout(()=>setShake(false),500); return; }
+    onStart(name.trim(), email.trim());
+  };
+
+  return (
+    <div className="screen">
+      <div className="card animate-in" style={{textAlign:'center'}}>
+        {/* Logo */}
+        <div style={{marginBottom:'1.5rem'}}>
+          <div className="logo" style={{marginBottom:'.5rem'}}>yape</div>
+          <div className="badge">GPM Commerce · Talent Challenge</div>
+        </div>
+
+        {/* Title */}
+        <h1 style={{marginBottom:'.75rem',lineHeight:1.15}}>
+          Senior Product Manager<br/>
+          <span className="accent">Commerce</span> – GPM Commerce
+        </h1>
+        <p className="subtitle" style={{maxWidth:520,margin:'0 auto 2rem'}}>
+          Tu misión: <strong style={{color:'var(--text)'}}>maximizar el GMV y la experiencia del usuario</strong> mediante análisis de datos, diseño de iniciativas y experimentación basada en hipótesis en las verticales de Commerce.
+        </p>
+
+        {/* Role pillars */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'.75rem',marginBottom:'2rem',textAlign:'left'}}>
+          {[
+            {icon:'⚡', label:'Product Analytics', desc:'Convierte datos en decisiones y define métricas de producto'},
+            {icon:'🧪', label:'Product Discovery', desc:'Hipótesis, experimentos y decisiones: escalar, iterar, descartar'},
+            {icon:'📊', label:'Product Strategy', desc:'North Star, GMV, conversión, trade-offs y outcomes'},
+          ].map((p,i) => (
+            <div key={i} style={{background:'rgba(124,58,237,.1)',border:'1px solid var(--border)',borderRadius:12,padding:'1rem'}}>
+              <div style={{fontSize:'1.4rem',marginBottom:'.4rem'}}>{p.icon}</div>
+              <div style={{fontWeight:700,fontSize:'.88rem',marginBottom:'.25rem',color:'var(--neon)'}}>{p.label}</div>
+              <div style={{fontSize:'.78rem',color:'var(--muted)',lineHeight:1.4}}>{p.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider"/>
+
+        {/* Form */}
+        <div style={{textAlign:'left',display:'flex',flexDirection:'column',gap:'1rem'}}>
+          <div>
+            <div className="label">Tu nombre completo *</div>
+            <input
+              type="text"
+              placeholder="ej. María García López"
+              value={name}
+              onChange={e=>setName(e.target.value)}
+              onKeyDown={e=>e.key==='Enter'&&handleStart()}
+              style={shake?{borderColor:'var(--red)',animation:'fadeIn .1s ease'}:{}}
+            />
+            {shake && <div style={{color:'var(--red)',fontSize:'.8rem',marginTop:'.3rem'}}>Por favor ingresa tu nombre para continuar</div>}
+          </div>
+          <div>
+            <div className="label">Email (opcional, para el reporte)</div>
+            <input type="email" placeholder="tu@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleStart()}/>
+          </div>
+          <button className="btn btn-primary" style={{width:'100%',justifyContent:'center',padding:'1rem',fontSize:'1rem'}} onClick={handleStart}>
+            Iniciar el Challenge →
+          </button>
+        </div>
+
+        <div style={{marginTop:'1.5rem',display:'flex',justifyContent:'center',gap:'1.5rem',color:'var(--dim)',fontSize:'.78rem'}}>
+          <span>⏱ ~20–30 min</span>
+          <span>·</span>
+          <span>🧩 2 módulos</span>
+          <span>·</span>
+          <span>📄 Reporte descargable</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SCREEN 2: NORTH STAR METRIC MODULE ─────────────────────────────────────
+function SQLScreen({ candidate, onComplete, savedData }) {
+  const [answers, setAnswers] = useState(savedData?.answers || {});
+
+  const allAnswered = NSM_QUESTIONS.every(q => answers[q.id] !== undefined);
+
+  const handleOption = (questionId, optionIndex) => {
+    setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
+  };
+
+  const handleContinue = () => {
+    const complete = NSM_QUESTIONS.every(q => answers[q.id] !== undefined);
+    if (!complete) return;
+    const correct = NSM_QUESTIONS.filter(q => answers[q.id] === q.answer).length;
+    const score = Math.round((correct / NSM_QUESTIONS.length) * 100);
+    onComplete({ answers: { ...answers }, score });
+  };
+
+  return (
+    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
+      <ProgressHeader step={2} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
+      <div className="card card-wide animate-in">
+        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
+          <div>
+            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 1 · Product Thinking</div>
+            <h2>North Star Metric</h2>
+            <p className="subtitle">Resuelve las 3 preguntas a partir de un mismo caso y demuestra criterio para construir un sistema de métricas de producto.</p>
+          </div>
+          <div className="score-circle">
+            <div className="score-num">1/4</div>
+            <div className="score-lbl">módulo</div>
+          </div>
+        </div>
+
+        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.15rem 1.25rem',marginBottom:'1.5rem',fontSize:'.9rem',lineHeight:1.7,color:'var(--muted)'}}>
+          <strong style={{color:'var(--text)'}}>Caso:</strong> Yape quiere acelerar el crecimiento de <span style={{color:'var(--accent)',fontWeight:700}}>Promos</span> como una experiencia recurrente para sus usuarios. El negocio crece en GMV, pero existe presión por descuentos, baja recurrencia y señales de deterioro en la experiencia. Como Senior Product Manager, debes definir cómo medirías el valor creado por el producto y cómo separarías crecimiento saludable de crecimiento artificial.
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',gap:'1rem',marginBottom:'1.5rem'}}>
+          {NSM_QUESTIONS.map((q, qi) => {
+            const selected = answers[q.id];
+            return (
+              <div key={q.id} style={{border:'1px solid var(--border)',borderRadius:12,padding:'1.1rem 1.15rem',background:'rgba(28,16,64,.42)'}}>
+                <div style={{display:'flex',gap:'.7rem',alignItems:'flex-start',marginBottom:'.9rem'}}>
+                  <span style={{background:'var(--purple-dark)',borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'.75rem',fontWeight:800,flexShrink:0}}>{qi+1}</span>
+                  <div style={{fontSize:'.92rem',fontWeight:600,lineHeight:1.55,color:'var(--text)'}}>{q.question}</div>
+                </div>
+                <div style={{display:'flex',flexDirection:'column',gap:'.55rem',paddingLeft:'2.1rem'}}>
+                  {q.options.map((opt, oi) => {
+                    const isSelected = selected === oi;
+                    return (
+                      <button
+                        key={oi}
+                        type="button"
+                        onClick={() => handleOption(q.id, oi)}
+                        style={{
+                          display:'flex',alignItems:'flex-start',gap:'.7rem',width:'100%',textAlign:'left',
+                          padding:'.7rem .8rem',borderRadius:9,cursor:'pointer',
+                          border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border)',
+                          background: isSelected ? 'rgba(124,58,237,.16)' : 'rgba(17,9,48,.38)',
+                          color:'var(--text)',fontFamily:'var(--sans)',fontSize:'.84rem',lineHeight:1.5
+                        }}
+                      >
+                        <span style={{width:22,height:22,borderRadius:'50%',border:isSelected?'6px solid var(--accent)':'2px solid var(--dim)',flexShrink:0,marginTop:1,boxSizing:'border-box'}} />
+                        <span>{String.fromCharCode(65+oi)}. {opt}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
+          <button
+            className={`btn ${allAnswered ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={handleContinue}
+            disabled={!allAnswered}
+            style={{opacity:allAnswered?1:.5}}
+          >
+            Continuar al módulo 2 →
+          </button>
+          {!allAnswered && <span className="hint">Responde las 3 preguntas para continuar.</span>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SCREEN 3: Business Case ────────────────────────────────────────────────
+function BusinessScreen({ candidate, onComplete, savedData }) {
+  const [answer, setAnswer] = useState(savedData?.answer || '');
+  const [saved, setSaved] = useState(false);
+  const minChars = 120;
+
+  const handleSave = () => {
+    if (answer.trim().length < minChars) return;
+    setSaved(true);
+    setTimeout(()=>setSaved(false), 2500);
+    onComplete({ answer });
+  };
+
+  const progress = Math.min(100, (answer.trim().length / minChars) * 100);
+  const isReady  = answer.trim().length >= minChars;
+
+  return (
+    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
+      <ProgressHeader step={3} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
+      <div className="card card-wide animate-in">
+        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
+          <div>
+            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 2 · Caso de Pricing</div>
+            <h2>Caso: Pricing & Cuotas</h2>
+            <p className="subtitle">Evalúa el impacto económico, estratégico y de experiencia de una decisión de producto en Commerce.</p>
+          </div>
+          <div className="score-circle">
+            <div className="score-num">2/2</div>
+            <div className="score-lbl">módulo</div>
+          </div>
+        </div>
+
+        {/* Context */}
+        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.25rem',marginBottom:'1.5rem',fontSize:'.9rem',lineHeight:1.65,color:'var(--muted)'}}>
+          <strong style={{color:'var(--text)'}}>Contexto:</strong> El equipo GPM Commerce está evaluando una iniciativa en la vertical <span style={{color:'var(--accent)',fontWeight:600}}>Tienda</span>. Se comparan dos configuraciones de precio para el mismo producto digital.
+        </div>
+
+        {/* Scenarios */}
+        <div className="scenario-grid">
+          <div className="scenario-card loser">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+              <div style={{fontWeight:700,fontSize:'1rem'}}>Escenario A</div>
+              <div className="badge-amber badge">Contado</div>
+            </div>
+            {SCENARIO_METRICS.map((m,i) => (
+              <div className="metric-row" key={i}>
+                <span className="metric-label">{m.label}</span>
+                <span className="metric-val" style={{color: i===2?'var(--red)':'var(--text)'}}>{m.a}</span>
+              </div>
+            ))}
+          </div>
+          <div className="scenario-card winner">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+              <div style={{fontWeight:700,fontSize:'1rem'}}>Escenario B</div>
+              <div className="badge-green badge">3 Cuotas sin interés</div>
+            </div>
+            {SCENARIO_METRICS.map((m,i) => (
+              <div className="metric-row" key={i}>
+                <span className="metric-label">{m.label}</span>
+                <span className="metric-val" style={{color: i===2?'var(--green)':'var(--text)'}}>{m.b}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Question */}
+        <div style={{background:'rgba(103,232,249,.05)',border:'1px solid rgba(103,232,249,.2)',borderRadius:12,padding:'1.25rem',marginBottom:'1.5rem'}}>
+          <div style={{fontWeight:700,color:'var(--cyan)',marginBottom:'.75rem',fontSize:'.9rem',textTransform:'uppercase',letterSpacing:'.04em'}}>🧠 Pregunta Crítica</div>
+          <p style={{fontSize:'.92rem',lineHeight:1.65}}>
+            Como Senior Product Manager, ¿bajo qué condiciones el Escenario B podría generar <strong style={{color:'var(--green)'}}>más valor</strong> o <strong style={{color:'var(--red)'}}>destruir valor</strong> frente al Escenario A? Explica los trade-offs entre conversión, ticket, caja, riesgo y experiencia, y qué decisión tomarías.
+          </p>
+
+        </div>
+
+        {/* Text area */}
+        <div style={{marginBottom:'1rem'}}>
+          <div className="label">✍️ Tu análisis</div>
+          <textarea
+            className="prose-area"
+            value={answer}
+            onChange={e=>setAnswer(e.target.value)}
+            placeholder="Estructura una decisión de producto: explicita supuestos, trade-offs, métricas de éxito y guardrails; considera valor presente neto y concluye con una recomendación y el experimento o evidencia que necesitarías para ejecutarla..."
+            style={{minHeight:190}}
+          />
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'.4rem'}}>
+            <div style={{flex:1,marginRight:'1rem'}}>
+              <div style={{height:3,background:'rgba(167,139,250,.1)',borderRadius:100,overflow:'hidden'}}>
+                <div style={{height:'100%',width:`${progress}%`,background:isReady?'var(--green)':'var(--accent)',borderRadius:100,transition:'width .3s,background .3s'}}/>
+              </div>
+            </div>
+            <div className="char-count">{answer.trim().length}/{minChars} chars mínimo</div>
+          </div>
+        </div>
+
+        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
+          <button
+            className={`btn ${isReady ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={handleSave}
+            disabled={!isReady}
+            style={{opacity: isReady ? 1 : .5}}
+          >
+            💾 Guardar Análisis
+          </button>
+          {savedData?.answer && (
+            <button className="btn btn-green" onClick={()=>onComplete({answer})}>
+              Ver mi Reporte →
+            </button>
+          )}
+          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Análisis guardado</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// ── SALES DATA (simulated ecommerce seasonality + YoY growth) ─────────────
+const MONTHS_LABELS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+// 2025: full year – ecommerce seasonality baseline (index 100 = avg month)
+// High: Nov/Dic (Black Friday, Navidad), Feb (San Valentín), May (Día de la Madre)
+// Low: Mar, Jun, Sep
+const SEASON_BASE = [88, 102, 78, 85, 110, 76, 82, 90, 74, 92, 148, 162];
+
+// YoY growth per month: random between 5%–50%, fixed seed for consistency
+const YOY_GROWTH = [0.18, 0.32, 0.12, 0.27, 0.45, 0.09, 0.21, 0.38, 0.15, 0.29, 0.22, 0.41];
+
+const BASE_GMV = 420000; // soles, base monthly average 2025
+
+const SALES_2025 = SEASON_BASE.map(s => Math.round(BASE_GMV * s / 100));
+const SALES_2026 = SEASON_BASE.map((s, i) =>
+  i < 5  // Jan–May 2026 only
+    ? Math.round(BASE_GMV * s / 100 * (1 + YOY_GROWTH[i]))
+    : null
+);
+
+// ── CHART SCREEN ──────────────────────────────────────────────────────────
+function ChartScreen({ candidate, onComplete, savedData }) {
+  const [answer, setAnswer] = useState(savedData?.answer || '');
+  const [saved, setSaved] = useState(false);
+  const [tooltip, setTooltip] = useState(null);
+  const minChars = 150;
+  const isReady = answer.trim().length >= minChars;
+  const progress = Math.min(100, (answer.trim().length / minChars) * 100);
+
+  const handleSave = () => {
+    if (!isReady) return;
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+    onComplete({ answer });
+  };
+
+  // Chart dimensions
+  const W = 620, H = 260, PAD = { top: 20, right: 20, bottom: 40, left: 68 };
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = H - PAD.top  - PAD.bottom;
+
+  const allVals = [...SALES_2025, ...SALES_2026.filter(Boolean)];
+  const maxVal  = Math.max(...allVals) * 1.12;
+  const minVal  = 0;
+
+  const xStep   = chartW / 11;          // 12 months, 11 gaps
+  const yScale  = (v) => chartH - ((v - minVal) / (maxVal - minVal)) * chartH;
+  const xPos    = (i) => PAD.left + i * xStep;
+
+  // Y axis grid lines
+  const yTicks = [0, 200000, 400000, 600000, 800000].filter(v => v <= maxVal * 1.05);
+
+  // Build SVG path
+  const path2025 = SALES_2025.map((v, i) =>
+    `${i === 0 ? 'M' : 'L'}${xPos(i).toFixed(1)},${(PAD.top + yScale(v)).toFixed(1)}`
+  ).join(' ');
+
+  const path2026Points = SALES_2026
+    .map((v, i) => v !== null ? { x: xPos(i), y: PAD.top + yScale(v), i } : null)
+    .filter(Boolean);
+  const path2026 = path2026Points.map((p, idx) =>
+    `${idx === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`
+  ).join(' ');
+
+  const fmt = (v) => v >= 1000000
+    ? `S/ ${(v/1000000).toFixed(1)}M`
+    : `S/ ${(v/1000).toFixed(0)}K`;
+
+  return (
+    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
+      <ProgressHeader step={4} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
+      <div className="card card-wide animate-in">
+
+        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
+          <div>
+            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 3 · Interpretación de Datos</div>
+            <h2>Análisis de Ventas – Vertical Promos</h2>
+            <p className="subtitle">Lee el gráfico y demuestra criterio de producto para diagnosticar el negocio y decidir qué investigar después.</p>
+          </div>
+          <div className="score-circle">
+            <div className="score-num">3/3</div>
+            <div className="score-lbl">módulo</div>
+          </div>
+        </div>
+
+        {/* Context */}
+        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.1rem 1.3rem',marginBottom:'1.25rem',fontSize:'.88rem',lineHeight:1.65,color:'var(--muted)'}}>
+          <strong style={{color:'var(--text)'}}>Contexto:</strong> El siguiente gráfico muestra el GMV mensual de la vertical <span style={{color:'var(--accent)',fontWeight:600}}>Promos</span> en Yape.
+          Se presentan los <span style={{color:'#C4B5FD',fontWeight:600}}>12 meses de 2025</span> y el avance de <span style={{color:'#67E8F9',fontWeight:600}}>enero a mayo 2026</span>.
+          Los valores están en soles (S/).
+        </div>
+
+        {/* KPI summary row */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'.65rem',marginBottom:'1.25rem'}}>
+          {(() => {
+            const may25 = SALES_2025[4];
+            const may26 = SALES_2026[4];
+            const yoy   = ((may26 - may25) / may25 * 100).toFixed(1);
+            const ytd25 = SALES_2025.slice(0,5).reduce((a,b)=>a+b,0);
+            const ytd26 = SALES_2026.slice(0,5).reduce((a,b)=>a+b,0);
+            const yoyYtd = ((ytd26-ytd25)/ytd25*100).toFixed(1);
+            const mom    = ((may26 - SALES_2026[3]) / SALES_2026[3] * 100).toFixed(1);
+            const items  = [
+              { label:'GMV Mayo 2026', val: fmt(may26), sub: 'Mes actual' },
+              { label:'YoY Mayo',      val: '+'+yoy+'%', sub: 'vs Mayo 2025', color:'var(--green)' },
+              { label:'YTD 2026',      val: fmt(ytd26),  sub: 'Ene–May acumulado' },
+              { label:'MoM Mayo',      val: (mom>0?'+':'')+mom+'%', sub: 'vs Abril 2026', color: mom>=0?'var(--green)':'var(--red)' },
+            ];
+            return items.map(({label,val,sub,color}) => (
+              <div key={label} style={{background:'rgba(28,16,64,.7)',border:'1px solid var(--border)',borderRadius:10,padding:'.7rem .8rem'}}>
+                <div style={{fontSize:'.72rem',color:'var(--muted)',marginBottom:'.2rem',textTransform:'uppercase',letterSpacing:'.05em'}}>{label}</div>
+                <div style={{fontSize:'1.05rem',fontWeight:800,fontFamily:'var(--mono)',color:color||'var(--text)'}}>{val}</div>
+                <div style={{fontSize:'.7rem',color:'var(--dim)',marginTop:'.15rem'}}>{sub}</div>
+              </div>
+            ));
+          })()}
+        </div>
+
+        {/* SVG Chart */}
+        <div style={{background:'#0A0520',border:'1px solid var(--border)',borderRadius:14,padding:'1rem 0 .5rem',marginBottom:'1.25rem',overflowX:'auto'}}>
+          <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',maxWidth:W,display:'block',margin:'0 auto',fontFamily:'Space Mono, monospace'}}
+            onMouseLeave={() => setTooltip(null)}>
+
+            {/* Grid lines */}
+            {yTicks.map(t => (
+              <g key={t}>
+                <line
+                  x1={PAD.left} y1={PAD.top + yScale(t)}
+                  x2={W - PAD.right} y2={PAD.top + yScale(t)}
+                  stroke="rgba(167,139,250,0.1)" strokeWidth="1" strokeDasharray="4,4"
+                />
+                <text x={PAD.left - 6} y={PAD.top + yScale(t) + 4}
+                  textAnchor="end" fill="#6B5F8A" fontSize="9.5">
+                  {fmt(t)}
+                </text>
+              </g>
+            ))}
+
+            {/* Month labels */}
+            {MONTHS_LABELS.map((m, i) => (
+              <text key={m} x={xPos(i)} y={H - PAD.bottom + 16}
+                textAnchor="middle" fill="#6B5F8A" fontSize="9.5">{m}</text>
+            ))}
+
+            {/* 2025 area fill */}
+            <defs>
+              <linearGradient id="grad25" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#A78BFA" stopOpacity="0.18"/>
+                <stop offset="100%" stopColor="#A78BFA" stopOpacity="0.01"/>
+              </linearGradient>
+              <linearGradient id="grad26" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#67E8F9" stopOpacity="0.22"/>
+                <stop offset="100%" stopColor="#67E8F9" stopOpacity="0.01"/>
+              </linearGradient>
+            </defs>
+
+            {/* 2025 fill */}
+            <path
+              d={path2025 + ` L${xPos(11).toFixed(1)},${(PAD.top+chartH).toFixed(1)} L${PAD.left},${(PAD.top+chartH).toFixed(1)} Z`}
+              fill="url(#grad25)"
+            />
+            {/* 2026 fill */}
+            {path2026Points.length > 1 && (
+              <path
+                d={path2026 + ` L${path2026Points[path2026Points.length-1].x.toFixed(1)},${(PAD.top+chartH).toFixed(1)} L${path2026Points[0].x.toFixed(1)},${(PAD.top+chartH).toFixed(1)} Z`}
+                fill="url(#grad26)"
+              />
+            )}
+
+            {/* 2025 line */}
+            <path d={path2025} fill="none" stroke="#A78BFA" strokeWidth="2" strokeLinejoin="round"/>
+
+            {/* 2026 line */}
+            <path d={path2026} fill="none" stroke="#67E8F9" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="6,0"/>
+
+            {/* Dots 2025 */}
+            {SALES_2025.map((v, i) => (
+              <circle key={'d25'+i}
+                cx={xPos(i)} cy={PAD.top + yScale(v)} r="4"
+                fill="#0A0520" stroke="#A78BFA" strokeWidth="2"
+                style={{cursor:'pointer'}}
+                onMouseEnter={() => setTooltip({ x: xPos(i), y: PAD.top+yScale(v), label: MONTHS_LABELS[i]+' 2025', val: fmt(v), color:'#A78BFA' })}
+              />
+            ))}
+
+            {/* Dots 2026 */}
+            {path2026Points.map(({x, y, i}) => (
+              <circle key={'d26'+i}
+                cx={x} cy={y} r="5"
+                fill="#0A0520" stroke="#67E8F9" strokeWidth="2.5"
+                style={{cursor:'pointer'}}
+                onMouseEnter={() => setTooltip({ x, y, label: MONTHS_LABELS[i]+' 2026', val: fmt(SALES_2026[i]), color:'#67E8F9',
+                  yoy: '+'+((SALES_2026[i]-SALES_2025[i])/SALES_2025[i]*100).toFixed(1)+'%' })}
+              />
+            ))}
+
+            {/* May 2026 marker */}
+            <line
+              x1={xPos(4)} y1={PAD.top}
+              x2={xPos(4)} y2={PAD.top+chartH}
+              stroke="rgba(103,232,249,0.25)" strokeWidth="1" strokeDasharray="3,3"
+            />
+            <text x={xPos(4)} y={PAD.top - 6} textAnchor="middle" fill="#67E8F9" fontSize="9" fontWeight="700">
+              Corte May 2026
+            </text>
+
+            {/* Tooltip */}
+            {tooltip && (() => {
+              const tx = Math.min(tooltip.x + 10, W - 120);
+              const ty = Math.max(tooltip.y - 50, PAD.top);
+              return (
+                <g>
+                  <rect x={tx} y={ty} width="110" height={tooltip.yoy ? 46 : 34} rx="6"
+                    fill="#1A0B35" stroke={tooltip.color} strokeWidth="1"/>
+                  <text x={tx+8} y={ty+14} fill={tooltip.color} fontSize="9.5" fontWeight="700">{tooltip.label}</text>
+                  <text x={tx+8} y={ty+27} fill="#EDE9FE" fontSize="10" fontWeight="700">{tooltip.val}</text>
+                  {tooltip.yoy && (
+                    <text x={tx+8} y={ty+40} fill="#34D399" fontSize="9">YoY {tooltip.yoy}</text>
+                  )}
+                </g>
+              );
+            })()}
+          </svg>
+
+          {/* Legend */}
+          <div style={{display:'flex',gap:'1.5rem',justifyContent:'center',paddingBottom:'.5rem',fontSize:'.78rem'}}>
+            <span style={{display:'flex',alignItems:'center',gap:'.4rem',color:'#A78BFA'}}>
+              <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#A78BFA" strokeWidth="2"/></svg>
+              GMV 2025
+            </span>
+            <span style={{display:'flex',alignItems:'center',gap:'.4rem',color:'#67E8F9'}}>
+              <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#67E8F9" strokeWidth="2.5"/></svg>
+              GMV 2026 (Ene–May)
+            </span>
+          </div>
+        </div>
+
+        {/* Question */}
+        <div style={{background:'rgba(103,232,249,.05)',border:'1px solid rgba(103,232,249,.2)',borderRadius:12,padding:'1.1rem 1.25rem',marginBottom:'1.25rem'}}>
+          <div style={{fontWeight:700,color:'var(--cyan)',marginBottom:'.6rem',fontSize:'.88rem',textTransform:'uppercase',letterSpacing:'.04em'}}>🧠 Pregunta</div>
+          <p style={{fontSize:'.92rem',lineHeight:1.65}}>
+            Observas el desempeño de Promos entre 2025 y 2026. ¿Qué diagnóstico de producto harías? Separa hechos de hipótesis, identifica qué puede explicar el crecimiento y define las preguntas y cortes de datos que priorizarías antes de decidir si intervenir, escalar o mantener la estrategia.
+          </p>
+        </div>
+
+        {/* Text area */}
+        <div style={{marginBottom:'1rem'}}>
+          <div className="label">✍️ Tu análisis</div>
+          <textarea
+            className="prose-area"
+            value={answer}
+            onChange={e => setAnswer(e.target.value)}
+            placeholder="Interpreta tendencias y estacionalidad, separa señal de ruido y plantea hipótesis causales. Define qué métricas, segmentos o funnels analizarías después y qué decisión de producto podría cambiar según los resultados..."
+            style={{minHeight:180}}
+          />
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'.4rem'}}>
+            <div style={{flex:1,marginRight:'1rem'}}>
+              <div style={{height:3,background:'rgba(167,139,250,.1)',borderRadius:100,overflow:'hidden'}}>
+                <div style={{height:'100%',width:`${progress}%`,background:isReady?'var(--green)':'var(--accent)',borderRadius:100,transition:'width .3s,background .3s'}}/>
+              </div>
+            </div>
+            <div className="char-count">{answer.trim().length}/{minChars} chars mínimo</div>
+          </div>
+        </div>
+
+        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
+          <button
+            className={`btn ${isReady ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={handleSave}
+            disabled={!isReady}
+            style={{opacity: isReady ? 1 : .5}}
+          >
+            💾 Guardar Análisis
+          </button>
+          {savedData?.answer && (
+            <button className="btn btn-green" onClick={() => onComplete({answer})}>
+              Finalizar Challenge →
+            </button>
+          )}
+          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Análisis guardado</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// ── BACKLOG DATA ───────────────────────────────────────────────────────────
+const PM_BACKLOG = [
+  { id:'A', title:'Simplificar pantalla de selección de promo',   desc:'De 12 campos a 4',                          reason:'Fricción alta en el flujo de compra',              type:'UX',            pts:8,  impact:'Sube conversión' },
+  { id:'B', title:'Notificación push a usuarios que abandonaron', desc:'Vieron una promo pero no compraron',         reason:'Abandono sin compra — GMV recuperable',            type:'GMV',           pts:4,  impact:'Recupera GMV perdido' },
+  { id:'C', title:'Sección "Promos del día" en el home de Yape',  desc:'Mayor visibilidad y descubrimiento',         reason:'Bajo descubrimiento de promos en el home',         type:'GMV',           pts:14, impact:'Sube volumen de compras' },
+  { id:'D', title:'Integración cashback de Yape en Promos',       desc:'Aplicar saldo cashback al comprar promos',   reason:'Falta de incentivo de compra recurrente',          type:'GMV',           pts:22, impact:'Muy alto — pero incierto' },
+  { id:'E', title:'Corregir bug de transacciones fallidas',       desc:'15% de transacciones fallan silenciosamente',reason:'Pérdida activa de GMV — S/ 14K/mes estimados',     type:'Deuda técnica', pts:6,  impact:'Detiene pérdida real de GMV' },
+  { id:'F', title:'Rediseño módulo de pagos de Promos',           desc:'Eliminar deuda técnica acumulada de 3 años', reason:'Riesgo técnico que bloquea velocidad futura',      type:'Deuda técnica', pts:16, impact:'Ninguno directo en Q4' },
+];
+
+const TYPE_COLORS = {
+  'UX':            { bg:'rgba(167,139,250,.15)', border:'rgba(167,139,250,.4)',  text:'#C4B5FD' },
+  'GMV':           { bg:'rgba(52,211,153,.1)',   border:'rgba(52,211,153,.35)', text:'#6EE7B7' },
+  'Deuda técnica': { bg:'rgba(251,191,36,.1)',   border:'rgba(251,191,36,.35)', text:'#FCD34D' },
+};
+
+// ── PM SCREEN ──────────────────────────────────────────────────────────────
+function PMScreen({ candidate, onComplete, savedData }) {
+  const SPRINTS   = [1, 2, 3, 4, 5, 6];
+  const CAPACITY  = 10;
+  const TOTAL_CAP = 60;
+
+  // assignment: { itemId -> sprintNum | 'out' }
+  const initAssign = () => {
+    const a = {};
+    PM_BACKLOG.forEach(i => { a[i.id] = 'out'; });
+    return a;
+  };
+  const [assignment, setAssignment] = useState(savedData?.assignment || initAssign());
+  const [justify, setJustify]       = useState(savedData?.justify || '');
+  const [dragging, setDragging]     = useState(null);
+  const [saved, setSaved]           = useState(false);
+
+  const MIN_JUSTIFY = 120;
+  const isReady = justify.trim().length >= MIN_JUSTIFY && PM_BACKLOG.some(i => assignment[i.id] !== 'out');
+  const progress = Math.min(100, (justify.trim().length / MIN_JUSTIFY) * 100);
+
+  const totalSP = TOTAL_CAP;
+  const usedSP  = PM_BACKLOG.reduce((s, i) => s + i.pts, 0);
+
+  const sprintSP = (sp) =>
+    PM_BACKLOG.filter(i => assignment[i.id] === sp).reduce((s, i) => s + i.pts, 0);
+
+  const assignedSP = PM_BACKLOG.filter(i => assignment[i.id] !== 'out').reduce((s, i) => s + i.pts, 0);
+
+  const assign = (itemId, sprint) => {
+    setAssignment(prev => ({ ...prev, [itemId]: sprint }));
+  };
+
+  const handleDragStart = (e, itemId) => {
+    setDragging(itemId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDrop = (e, target) => {
+    e.preventDefault();
+    if (dragging) { assign(dragging, target); setDragging(null); }
+  };
+
+  const handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+
+  const handleFinish = () => {
+    if (!isReady) return;
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+    const summary = PM_BACKLOG.map(i => {
+      const sp = assignment[i.id];
+      return i.id + ' (' + i.title + '): ' + (sp === 'out' ? 'Fuera del quarter' : 'Sprint ' + sp);
+    }).join('\n');
+    onComplete({ assignment, justify, summary: summary + '\n\nJustificación:\n' + justify });
+  };
+
+  const tc = (type) => TYPE_COLORS[type];
+
+  return (
+    <div className="screen" style={{justifyContent:'flex-start', paddingTop:'2rem'}}>
+      <ProgressHeader step={5} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
+      <div className="card card-wide animate-in">
+
+        {/* Header */}
+        <div style={{marginBottom:'1.25rem'}}>
+          <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 4 · Product Management</div>
+          <h2 style={{marginBottom:'.3rem'}}>Priorización, trade-offs y alineación con stakeholders</h2>
+          <p className="subtitle">Construye una secuencia de ejecución para el quarter: asigna cada iniciativa al sprint donde debería ejecutarse o déjala fuera. Luego explica los trade-offs, riesgos y supuestos detrás de tu decisión.</p>
+        </div>
+
+        {/* Context */}
+        <div style={{background:'rgba(124,58,237,.07)', border:'1px solid var(--border)', borderRadius:12, padding:'1rem 1.2rem', marginBottom:'1.1rem', fontSize:'.87rem', lineHeight:1.7, color:'var(--muted)'}}>
+          <strong style={{color:'var(--text)'}}>Contexto:</strong> Eres el Senior Product Manager de la vertical <span style={{color:'var(--accent)', fontWeight:700}}>Promos</span> en Yape. Estás en el <strong style={{color:'var(--text)'}}>último mes de Q3</strong> cerrando la priorización de Q4. El objetivo es <span style={{color:'var(--green)', fontWeight:700}}>S/ 500K de GMV</span>. El promedio mensual actual es <strong style={{color:'var(--text)'}}>S/ 95K</strong> — proyecta S/ 285K sin cambios. Q4 tiene <strong style={{color:'var(--text)'}}>6 sprints × 10 puntos = 60 puntos disponibles</strong>. Los puntos de historia son la estimación de esfuerzo del equipo de tecnología.
+          <div style={{marginTop:'.75rem', padding:'.6rem .85rem', background:'rgba(248,113,113,.07)', border:'1px solid rgba(248,113,113,.2)', borderRadius:8, color:'#FCA5A5', fontSize:'.82rem'}}>
+            ⚠️ En la sesión de planning, el Head Comercial dice: <em>"La integración con cashback es la prioridad número uno — va a disparar el GMV. Y la sección de Promos del día tiene que estar desde el inicio del quarter, marketing ya tiene una campaña preparada."</em>
+          </div>
+        </div>
+
+        {/* Capacity bar */}
+        <div style={{display:'flex', alignItems:'center', gap:'1rem', marginBottom:'1.1rem', padding:'.7rem 1rem', background:'rgba(28,16,64,.6)', border:'1px solid var(--border)', borderRadius:10}}>
+          <div style={{flex:1}}>
+            <div style={{display:'flex', justifyContent:'space-between', marginBottom:'.3rem'}}>
+              <span style={{fontSize:'.78rem', color:'var(--muted)'}}>Puntos asignados al quarter</span>
+              <span style={{fontFamily:'var(--mono)', fontWeight:700, fontSize:'.85rem', color: assignedSP > totalSP ? 'var(--red)' : assignedSP > 48 ? 'var(--amber)' : 'var(--green)'}}>
+                {assignedSP} / {totalSP} SP
+              </span>
+            </div>
+            <div style={{height:6, background:'rgba(167,139,250,.1)', borderRadius:100, overflow:'hidden'}}>
+              <div style={{height:'100%', width: Math.min(100, assignedSP/totalSP*100)+'%',
+                background: assignedSP > totalSP ? 'var(--red)' : assignedSP > 48 ? 'var(--amber)' : 'var(--green)',
+                borderRadius:100, transition:'width .3s, background .3s'}}/>
+            </div>
+          </div>
+          {assignedSP > totalSP && (
+            <span style={{fontSize:'.78rem', color:'var(--red)', fontWeight:700, whiteSpace:'nowrap'}}>⚠️ +{assignedSP - totalSP} SP sobre capacidad</span>
+          )}
+        </div>
+
+        {/* Drag-and-drop board */}
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'.75rem', marginBottom:'1rem'}}>
+
+          {/* Unassigned pool */}
+          <div
+            style={{gridColumn:'1/-1', background:'rgba(28,16,64,.5)', border: dragging ? '2px dashed var(--accent)' : '1px solid var(--border)', borderRadius:12, padding:'.75rem', minHeight:80}}
+            onDrop={(e) => handleDrop(e, 'out')}
+            onDragOver={handleDragOver}
+          >
+            <div style={{fontSize:'.72rem', fontWeight:700, color:'var(--dim)', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:'.6rem'}}>
+              📦 Backlog — fuera del quarter ({PM_BACKLOG.filter(i => assignment[i.id] === 'out').length} iniciativas, {PM_BACKLOG.filter(i => assignment[i.id] === 'out').reduce((s,i) => s+i.pts, 0)} SP)
+            </div>
+            <div style={{display:'flex', flexWrap:'wrap', gap:'.5rem', minHeight:40}}>
+              {PM_BACKLOG.filter(i => assignment[i.id] === 'out').map(item => {
+                const c = tc(item.type);
+                return (
+                  <div
+                    key={item.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, item.id)}
+                    style={{
+                      background: c.bg, border: '1px solid ' + c.border, borderRadius:8,
+                      padding:'.5rem .75rem', cursor:'grab', userSelect:'none',
+                      opacity: dragging === item.id ? .5 : 1, transition:'opacity .15s',
+                      display:'flex', flexDirection:'column', gap:'.25rem', minWidth:200, maxWidth:260
+                    }}
+                  >
+                    <div style={{display:'flex', alignItems:'center', gap:'.5rem'}}>
+                      <span style={{fontFamily:'var(--mono)', fontWeight:800, color:c.text, fontSize:'.82rem'}}>{item.id}</span>
+                      <span style={{color:'var(--text)', fontSize:'.8rem', fontWeight:600, flex:1}}>{item.title}</span>
+                      <span style={{fontFamily:'var(--mono)', fontSize:'.75rem', color: item.pts > 10 ? 'var(--red)' : 'var(--amber)', fontWeight:700, whiteSpace:'nowrap'}}>{item.pts}SP</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', gap:'.1rem', paddingLeft:'.1rem'}}>
+                      <span style={{fontSize:'.7rem', color:'var(--dim)'}}>📌 {item.reason}</span>
+                      <span style={{fontSize:'.7rem', color:c.text, opacity:.85}}>↗ {item.impact}</span>
+                    </div>
+                  </div>
+                );
+              })}
+              {PM_BACKLOG.filter(i => assignment[i.id] === 'out').length === 0 && (
+                <div style={{color:'var(--dim)', fontSize:'.8rem', fontStyle:'italic'}}>Todas las iniciativas están asignadas</div>
+              )}
+            </div>
+          </div>
+
+          {/* Sprint lanes */}
+          {SPRINTS.map(sp => {
+            const spSP   = sprintSP(sp);
+            const over   = spSP > CAPACITY;
+            const items  = PM_BACKLOG.filter(i => assignment[i.id] === sp);
+            return (
+              <div
+                key={sp}
+                onDrop={(e) => handleDrop(e, sp)}
+                onDragOver={handleDragOver}
+                style={{
+                  background: over ? 'rgba(248,113,113,.06)' : 'rgba(28,16,64,.4)',
+                  border: dragging ? '2px dashed ' + (over ? 'var(--red)' : 'var(--accent)') : '1px solid ' + (over ? 'rgba(248,113,113,.4)' : 'var(--border)'),
+                  borderRadius:12, padding:'.75rem', minHeight:90,
+                  transition:'border .15s, background .15s'
+                }}
+              >
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.5rem'}}>
+                  <span style={{fontSize:'.78rem', fontWeight:700, color:'var(--neon)'}}>Sprint {sp}</span>
+                  <span style={{fontFamily:'var(--mono)', fontSize:'.75rem', fontWeight:700,
+                    color: over ? 'var(--red)' : spSP > 0 ? 'var(--amber)' : 'var(--dim)'}}>
+                    {spSP}/{CAPACITY} SP {over ? '⚠️' : ''}
+                  </span>
+                </div>
+                <div style={{display:'flex', flexDirection:'column', gap:'.4rem', minHeight:40}}>
+                  {items.map(item => {
+                    const c = tc(item.type);
+                    return (
+                      <div
+                        key={item.id}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, item.id)}
+                        style={{
+                          background:c.bg, border:'1px solid '+c.border, borderRadius:7,
+                          padding:'.45rem .6rem', cursor:'grab', userSelect:'none',
+                          opacity: dragging === item.id ? .5 : 1,
+                          display:'flex', flexDirection:'column', gap:'.2rem'
+                        }}
+                      >
+                        <div style={{display:'flex', alignItems:'center', gap:'.4rem'}}>
+                          <span style={{fontFamily:'var(--mono)', fontWeight:800, color:c.text, fontSize:'.78rem'}}>{item.id}</span>
+                          <span style={{color:'var(--text)', fontSize:'.76rem', flex:1, fontWeight:600}}>{item.title}</span>
+                          <span style={{fontFamily:'var(--mono)', fontSize:'.7rem', color: item.pts > 10 ? 'var(--red)' : 'var(--amber)', fontWeight:700}}>{item.pts}SP</span>
+                        </div>
+                        <div style={{display:'flex', flexDirection:'column', gap:'.08rem', paddingLeft:'.1rem'}}>
+                          <span style={{fontSize:'.67rem', color:'var(--dim)'}}>📌 {item.reason}</span>
+                          <span style={{fontSize:'.67rem', color:c.text, opacity:.8}}>↗ {item.impact}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {items.length === 0 && (
+                    <div style={{color:'var(--dim)', fontSize:'.74rem', fontStyle:'italic', textAlign:'center', paddingTop:'.5rem'}}>Arrastra aquí</div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Justification */}
+        <div style={{marginBottom:'1rem'}}>
+          <div style={{background:'rgba(103,232,249,.05)', border:'1px solid rgba(103,232,249,.2)', borderRadius:10, padding:'.85rem 1rem', marginBottom:'.75rem', fontSize:'.88rem', lineHeight:1.65, color:'var(--text)'}}>
+            <span style={{color:'var(--cyan)', fontWeight:700}}>🧠 Justifica tu decisión:</span> ¿Por qué ese orden? ¿Qué outcome priorizas y qué trade-offs aceptas? ¿Qué iniciativas dejaste fuera y por qué? ¿Cómo manejarías D (cashback) frente a la presión del Head Comercial y qué evidencia pedirías antes de comprometer capacidad?
+          </div>
+          <div className="label" style={{marginBottom:'.5rem'}}>✍️ Tu justificación</div>
+          <textarea
+            className="prose-area"
+            value={justify}
+            onChange={e => setJustify(e.target.value)}
+            placeholder="Explica el criterio de producto detrás de tu priorización, los trade-offs, riesgos, dependencias y cómo alinearías a los stakeholders..."
+            style={{minHeight:150}}
+          />
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'.4rem', marginBottom:'1rem'}}>
+            <div style={{flex:1, marginRight:'1rem'}}>
+              <div style={{height:3, background:'rgba(167,139,250,.1)', borderRadius:100, overflow:'hidden'}}>
+                <div style={{height:'100%', width:progress+'%', background:justify.trim().length>=MIN_JUSTIFY?'var(--green)':'var(--accent)', borderRadius:100, transition:'width .3s,background .3s'}}/>
+              </div>
+            </div>
+            <div className="char-count">{justify.trim().length}/{MIN_JUSTIFY} chars mínimo</div>
+          </div>
+        </div>
+
+        <div style={{display:'flex', gap:'1rem', alignItems:'center', flexWrap:'wrap'}}>
+          <button
+            className={`btn ${isReady ? 'btn-green' : 'btn-ghost'}`}
+            onClick={handleFinish}
+            disabled={!isReady}
+            style={{opacity: isReady ? 1 : .5}}
+          >
+            ✅ Finalizar Challenge
+          </button>
+          {!isReady && !PM_BACKLOG.some(i => assignment[i.id] !== 'out') && (
+            <span style={{color:'var(--dim)', fontSize:'.82rem'}}>Asigna al menos una iniciativa a un sprint</span>
+          )}
+          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Guardado</span>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// ── SCREEN 4: Candidate Completion ────────────────────────────────────────
+function CompletionScreen({ candidate, email, sqlData, bizData, chartData, pmData, onAdminAccess }) {
+  const [downloaded, setDownloaded] = useState(false);
+  const now = new Date().toLocaleDateString('es-PE', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
+
+  const handleDownload = () => {
+    const sep = '═'.repeat(50);
+    const div = '─'.repeat(50);
+
+    const lines = [
+      sep,
+      '  YAPE · REPORTE DE CHALLENGE',
+      '  Senior Product Manager – GPM Commerce',
+      sep,
+      '',
+      'Candidato : ' + candidate,
+      'Email     : ' + (email || 'No proporcionado'),
+      'Fecha     : ' + now,
+      '',
+      div,
+      'MÓDULO 1 · NORTH STAR METRIC',
+      div,
+      (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${q.question}\nRespuesta: ${String.fromCharCode(65 + sqlData.answers[q.id])}`).join('\n\n') : 'Sin respuesta'),
+      '',
+      div,
+      'MÓDULO 2 · CASO DE PRICING (Cuotas)',
+      div,
+      (bizData?.answer || 'Sin respuesta'),
+      '',
+      div,
+      'MÓDULO 3 · ANÁLISIS DE VENTAS PROMOS',
+      div,
+      (chartData?.answer || 'Sin respuesta'),
+      '',
+      sep,
+      'Documento generado el ' + now,
+      'Yape · GPM Commerce · Challenge Platform',
+      sep,
+    ];
+
+    const text = lines.join('\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'Reporte_Challenge_' + candidate.replace(/\s+/g, '_') + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    setDownloaded(true);
+  };
+
+  const handlePrint = () => {
+    const sep = '═'.repeat(50);
+    const div = '─'.repeat(50);
+    const lines = [
+      sep,
+      '  YAPE · REPORTE DE CHALLENGE',
+      '  Senior Product Manager – GPM Commerce',
+      sep,
+      '',
+      'Candidato : ' + candidate,
+      'Fecha     : ' + now,
+      '',
+      div,
+      'MÓDULO 1 · NORTH STAR METRIC',
+      div,
+      (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${q.question}\nRespuesta: ${String.fromCharCode(65 + sqlData.answers[q.id])}`).join('\n\n') : 'Sin respuesta'),
+      '',
+      div,
+      'MÓDULO 2 · CASO DE PRICING',
+      div,
+      (bizData?.answer || 'Sin respuesta'),
+      '',
+      div,
+      'MÓDULO 3 · ANÁLISIS DE VENTAS',
+      div,
+      (chartData?.answer || 'Sin respuesta'),
+      '',
+      div,
+      'MÓDULO 4 · PM – PRIORIZACIÓN Q4',
+      div,
+      (pmData?.summary || 'Sin respuesta'),
+      '',
+      sep,
+    ];
+    const text = lines.join('\n');
+    const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const w = window.open('', '_blank');
+    w.document.write(
+      '<!DOCTYPE html><html><head><meta charset="UTF-8"/>' +
+      '<title>Reporte Challenge – ' + candidate + '</title>' +
+      '<style>' +
+        'body{font-family:"Courier New",monospace;padding:2.5rem;font-size:13px;line-height:1.75;color:#1a1a2e;background:#fff}' +
+        'pre{white-space:pre-wrap;word-break:break-word}' +
+        '@page{margin:2cm}' +
+        '@media print{body{padding:0}}' +
+      '</style></head>' +
+      '<body><pre>' + escaped + '</pre>' +
+      '</body></html>'
+    );
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 400);
+  };
+
+  return (
+    <div className="screen">
+      <div className="card animate-in" style={{maxWidth:560,textAlign:'center'}}>
+        <div style={{fontSize:'3rem',marginBottom:'1rem'}}>✅</div>
+        <div className="badge badge-green" style={{marginBottom:'1rem'}}>Challenge Completado</div>
+        <h2 style={{marginBottom:'.6rem'}}>¡Gracias, {candidate}!</h2>
+        <p className="subtitle" style={{maxWidth:420,margin:'0 auto 2rem'}}>
+          Tu respuesta ha sido registrada correctamente. Descarga tu reporte y compártelo en la sesión.
+        </p>
+
+        <div style={{background:'rgba(124,58,237,.08)',border:'1px solid var(--border)',borderRadius:14,padding:'1.5rem',marginBottom:'1.5rem',textAlign:'left'}}>
+          <div style={{fontWeight:700,color:'var(--neon)',fontSize:'.82rem',textTransform:'uppercase',letterSpacing:'.07em',marginBottom:'1rem'}}>
+            📄 Tu reporte incluye
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:'.6rem'}}>
+            {[
+              {icon:'🧭', label:'Módulo 1', desc:'Tus respuestas sobre North Star Metric'},
+              {icon:'📊', label:'Módulo 2', desc:'Tu análisis del caso de pricing con cuotas'},
+              {icon:'📈', label:'Módulo 3', desc:'Tu interpretación del gráfico de ventas Promos'},
+              {icon:'🎯', label:'Módulo 4', desc:'Tu asignación de iniciativas al backlog Q4 con justificación'},
+            ].map(({icon,label,desc}) => (
+              <div key={label} style={{display:'flex',alignItems:'center',gap:'.75rem',padding:'.5rem .75rem',background:'rgba(28,16,64,.5)',borderRadius:8}}>
+                <span style={{fontSize:'1.2rem'}}>{icon}</span>
+                <div>
+                  <span style={{fontWeight:700,fontSize:'.85rem',color:'var(--accent)'}}>{label}</span>
+                  <span style={{color:'var(--muted)',fontSize:'.82rem',marginLeft:'.5rem'}}>{desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{display:'flex',gap:'.75rem',justifyContent:'center',flexWrap:'wrap',marginBottom:'2rem'}}>
+          <button className="btn btn-primary" onClick={handleDownload} style={{gap:'.5rem'}}>
+            {downloaded ? '✓ Descargado' : '⬇️ Descargar .txt'}
+          </button>
+          <button className="btn btn-outline" onClick={handlePrint}>
+            🖨️ Imprimir / PDF
+          </button>
+        </div>
+
+        <div style={{display:'flex',justifyContent:'center'}}>
+          <button
+            onClick={onAdminAccess}
+            style={{background:'none',border:'none',cursor:'pointer',color:'var(--dim)',fontSize:'.72rem',fontFamily:'var(--mono)',opacity:.35,transition:'opacity .2s'}}
+            onMouseEnter={e=>e.target.style.opacity=1}
+            onMouseLeave={e=>e.target.style.opacity=.35}
+          >
+            admin
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SCREEN 4b: Admin Report (PIN-gated) ────────────────────────────────────
+const ADMIN_PIN = '2025'; // ← cambia este PIN antes de publicar
+
+function ReportScreen({ candidate, email, sqlData, bizData, chartData, pmData }) {
+  const [pin, setPin] = useState('');
+  const [unlocked, setUnlocked] = useState(false);
+  const [pinError, setPinError] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const now = new Date().toLocaleDateString('es-PE', {day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  const handleUnlock = () => {
+    if (pin === ADMIN_PIN) { setUnlocked(true); setPinError(false); }
+    else { setPinError(true); setTimeout(()=>setPinError(false),1500); setPin(''); }
+  };
+
+  const sqlScore = typeof sqlData?.score === 'number' ? sqlData.score : 0;
+
+  const bizScore = (() => {
+    const a = (bizData?.answer||'').toLowerCase();
+    let pts = 0;
+    if (a.includes('valor presente') || a.includes('npv') || a.includes('vp') || a.includes('descuento')) pts += 25;
+    if (a.includes('costo de capital') || a.includes('tasa') || a.includes('wacc') || a.includes('cok')) pts += 20;
+    if (a.includes('kpi') || a.includes('métrica') || a.includes('metrica') || a.includes('churn') || a.includes('abandono')) pts += 20;
+    if (a.includes('recomiend') || a.includes('lanzar') || a.includes('iniciativa')) pts += 20;
+    if (a.trim().split(/\s+/).length > 80) pts += 15;
+    return Math.min(pts, 100);
+  })();
+
+  const chartScore = (() => {
+    const a = (chartData?.answer||'').toLowerCase();
+    let pts = 0;
+    if (a.includes('yoy') || a.includes('año') || a.includes('interanual') || a.includes('2025') || a.includes('2026')) pts += 25;
+    if (a.includes('estacionalidad') || a.includes('estacional') || a.includes('temporada') || a.includes('patron') || a.includes('patrón')) pts += 20;
+    if (a.includes('mom') || a.includes('mes a mes') || a.includes('mensual') || a.includes('variación')) pts += 20;
+    if (a.includes('pregunta') || a.includes('kpi') || a.includes('métrica') || a.includes('profundizar') || a.includes('contexto')) pts += 20;
+    if (a.trim().split(/\s+/).length > 80) pts += 15;
+    return Math.min(pts, 100);
+  })();
+
+  const pmScore = (() => {
+    const a1 = (pmData?.summary||'').toLowerCase();
+    const a2 = (pmData?.justify||'').toLowerCase();
+    const a  = a1 + ' ' + a2;
+    let pts = 0;
+    if (a1.includes('e') || a1.includes('bug') || a1.includes('falla') || a1.includes('transacc')) pts += 20;
+    if (a1.includes('sprint') || a1.includes('punto') || a1.includes('capacidad')) pts += 20;
+    if (a.includes('bug') || a.includes('deuda') || a.includes('sprint')) pts += 20;
+    if (a.includes('cashback') || a.includes('head') || a.includes('comercial')) pts += 20;
+    if (a.trim().split(/\s+/).length > 120) pts += 20;
+    return Math.min(pts, 100);
+  })();
+
+  const totalScore = Math.round((sqlScore + bizScore + chartScore + pmScore) / 4);
+  const level      = totalScore >= 80 ? 'Alto' : totalScore >= 55 ? 'Medio' : 'Básico';
+  const levelColor = totalScore >= 80 ? 'var(--green)' : totalScore >= 55 ? 'var(--amber)' : 'var(--red)';
+  const recommendation = totalScore >= 80
+    ? '✅ Recomendado para avanzar – Demuestra dominio técnico y criterio de negocio sólido.'
+    : totalScore >= 55
+    ? '🔄 Revisar en entrevista – Buena base, con brechas que pueden desarrollarse en el rol.'
+    : '⚠️ Requiere más evaluación – Se sugiere una sesión técnica adicional antes de avanzar.';
+
+  const queryText  = (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${String.fromCharCode(65 + sqlData.answers[q.id])} - ${q.options[sqlData.answers[q.id]]}`).join('\n') : 'Sin respuesta');
+  const answerText = (bizData?.answer || 'Sin respuesta');
+
+  const reportLines = [
+    '══════════════════════════════════════════════',
+    '  YAPE · REPORTE DE EVALUACIÓN',
+    '  Senior Product Manager – GPM Commerce',
+    '══════════════════════════════════════════════',
+    'Candidato   : ' + candidate,
+    'Email       : ' + (email || 'No proporcionado'),
+    'Fecha       : ' + now,
+    '',
+    '── RESULTADOS ──────────────────────────────',
+    'Score North Star       : ' + sqlScore  + '/100',
+    'Score Análisis Negocio : ' + bizScore  + '/100',
+    'Score Total            : ' + totalScore + '/100',
+    'Nivel de alineación    : ' + level,
+    '',
+    '── RECOMENDACIÓN ───────────────────────────',
+    recommendation,
+    '',
+    '── MÓDULO NORTH STAR METRIC ────────────────',
+    queryText.substring(0, 600) + (queryText.length > 600 ? '\n[...consulta truncada]' : ''),
+    '',
+    '── MÓDULO ANÁLISIS DE NEGOCIO ──────────────',
+    answerText.substring(0, 800) + (answerText.length > 800 ? '\n[...respuesta truncada]' : ''),
+    '',
+    '── MÓDULO GRÁFICO VENTAS PROMOS ────────────',
+    (chartData?.answer || 'Sin respuesta').substring(0, 800) + ((chartData?.answer||'').length > 800 ? '\n[...respuesta truncada]' : ''),
+    '',
+    '── MÓDULO 4 · PM – PRIORIZACIÓN Q4 ────────',
+    (pmData?.summary || 'Sin respuesta').substring(0, 800) + ((pmData?.summary||'').length > 800 ? '\n[...truncado]' : ''),
+    '',
+    '── FIRMA ────────────────────────────────────',
+    'Generado por Yape · GPM Commerce · Challenge Platform',
+    'Evaluación completada el ' + now,
+    '══════════════════════════════════════════════',
+  ];
+  const reportText = reportLines.join('\n');
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(reportText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
+
+  const handlePrint = () => {
+    const printContent = reportText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const w = window.open('', '_blank');
+    w.document.write(
+      '<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Reporte \u2013 ' + candidate + '</title>' +
+      '<style>body{font-family:"Courier New",monospace;background:#09051A;color:#EDE9FE;padding:2rem;white-space:pre-wrap;font-size:13px;line-height:1.7}' +
+      '@media print{body{background:white;color:black}}</style></head><body>' +
+      printContent + '</body></html>'
+    );
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 300);
+  };
+
+  if (!unlocked) {
+    return (
+      <div className="screen">
+        <div className="card animate-in" style={{maxWidth:420,textAlign:'center'}}>
+          <div style={{fontSize:'2.5rem',marginBottom:'1rem'}}>🔒</div>
+          <div className="badge" style={{marginBottom:'1rem'}}>Acceso Restringido</div>
+          <h2 style={{marginBottom:'.5rem'}}>Panel Admin</h2>
+          <p className="subtitle" style={{marginBottom:'1.5rem'}}>
+            Esta sección es exclusiva para el equipo de Talent. Ingresa el PIN de administrador.
+          </p>
+          <div style={{marginBottom:'1rem'}}>
+            <input
+              type="password"
+              placeholder="PIN de administrador"
+              value={pin}
+              onChange={e => setPin(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleUnlock()}
+              style={{textAlign:'center',letterSpacing:'.3em',fontSize:'1.2rem',
+                border: pinError ? '1px solid var(--red)' : '1px solid var(--border2)'}}
+            />
+            {pinError && (
+              <div style={{color:'var(--red)',fontSize:'.82rem',marginTop:'.4rem'}}>
+                PIN incorrecto. Inténtalo de nuevo.
+              </div>
+            )}
+          </div>
+          <button className="btn btn-primary" style={{width:'100%',justifyContent:'center'}} onClick={handleUnlock}>
+            Acceder al Reporte →
+          </button>
+          <div style={{marginTop:'1.5rem',color:'var(--dim)',fontSize:'.75rem'}}>
+            <span className="logo logo-sm">yape</span> · GPM Commerce · Uso interno
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
+      <ProgressHeader step={6} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
+      <div className="card card-wide animate-in">
+
+        <div style={{textAlign:'center',marginBottom:'2rem'}}>
+          <div style={{fontSize:'2.5rem',marginBottom:'.5rem'}}>📋</div>
+          <div className="badge" style={{marginBottom:'.75rem'}}>🔓 Vista Admin</div>
+          <h2>Reporte de Evaluación</h2>
+          <p className="subtitle">{candidate} · {now}</p>
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'1rem',marginBottom:'1.5rem'}}>
+          {[
+            {label:'North Star', score:sqlScore,   icon:'🧭'},
+            {label:'Pricing', score:bizScore,   icon:'📊'},
+            {label:'Ventas',  score:chartScore, icon:'📈'},
+            {label:'PM',      score:pmScore,    icon:'🎯'},
+            {label:'Total',   score:totalScore, icon:'⭐', highlight:true},
+          ].map(({label,score,icon,highlight}) => (
+            <div key={label} style={{
+              textAlign:'center',padding:'1.25rem .75rem',borderRadius:12,
+              background: highlight ? 'rgba(124,58,237,.15)' : 'rgba(28,16,64,.6)',
+              border: '1px solid ' + (highlight ? 'var(--accent)' : 'var(--border)'),
+            }}>
+              <div style={{fontSize:'1.4rem',marginBottom:'.3rem'}}>{icon}</div>
+              <div style={{fontSize:'2rem',fontWeight:800,fontFamily:'var(--mono)',lineHeight:1,
+                color: score>=80 ? 'var(--green)' : score>=55 ? 'var(--amber)' : 'var(--red)'
+              }}>{score}</div>
+              <div style={{color:'var(--muted)',fontSize:'.78rem',marginTop:'.25rem'}}>{label} / 100</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{background:'rgba(28,16,64,.6)',border:'1px solid var(--border)',borderRadius:12,
+          padding:'1.25rem',marginBottom:'1.5rem',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,color:levelColor,fontSize:'1.1rem',marginBottom:'.25rem'}}>
+              Alineación: {level}
+            </div>
+            <div style={{color:'var(--text)',fontSize:'.9rem',lineHeight:1.5}}>{recommendation}</div>
+          </div>
+          <div style={{flexShrink:0,width:64,height:64,borderRadius:'50%',
+            display:'flex',alignItems:'center',justifyContent:'center',
+            background:'conic-gradient(' + levelColor + ' ' + totalScore + '%, rgba(167,139,250,.15) 0%)',
+            fontSize:'1.1rem',fontWeight:700,color:levelColor}}>
+            {totalScore}%
+          </div>
+        </div>
+
+        <div style={{marginBottom:'1.5rem'}}>
+          <div className="label" style={{marginBottom:'.6rem'}}>📄 Reporte completo</div>
+          <div className="report-block">{reportText}</div>
+        </div>
+
+        <div style={{display:'flex',gap:'.75rem',flexWrap:'wrap'}}>
+          <button className="btn btn-primary" onClick={handleCopy}>
+            {copied ? '✓ ¡Copiado!' : '📋 Copiar Reporte'}
+          </button>
+          <button className="btn btn-outline" onClick={handlePrint}>
+            🖨️ Descargar / Imprimir PDF
+          </button>
+        </div>
+
+      </div>
+      <div style={{marginTop:'2rem',textAlign:'center',color:'var(--dim)',fontSize:'.78rem'}}>
+        <span className="logo logo-sm">yape</span> · GPM Commerce · Challenge Platform · Confidencial interno
+      </div>
+    </div>
+  );
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────
+function App() {
+  const [step, setStep] = useState(1);
+  const [candidate, setCandidate] = useState('');
+  const [email, setEmail] = useState('');
+  const [sqlData, setSqlData] = useState(null);
+  const [bizData, setBizData] = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [pmData, setPmData] = useState(null);
+
+  const handleStart = (name, mail) => {
+    setCandidate(name);
+    setEmail(mail);
+    setStep(2);
+  };
+  const handleSQLComplete = (data) => {
+    setSqlData(data);
+  };
+  const handleSQLAdvance = (data) => {
+    setSqlData(data);
+    setStep(3);
+  };
+  const handleBizComplete = (data) => {
+    setBizData(data);
+  };
+  const handleBizAdvance = (data) => {
+    setBizData(data);
+    setStep(4);
+  };
+
+  // Wire onComplete to also advance when we have enough data
+  const sqlHandler = (data) => {
+    setSqlData(data);
+    // auto-show continue after save
+  };
+
+  return (
+    <div className="app-root">
+      {step === 1 && <WelcomeScreen onStart={handleStart}/>}
+      {step === 2 && (
+        <SQLScreen
+          candidate={candidate}
+          savedData={sqlData}
+          onComplete={(data) => {
+            setSqlData(data);
+            setStep(3);
+          }}
+        />
+      )}
+      {step === 3 && (
+        <BusinessScreen
+          candidate={candidate}
+          savedData={bizData}
+          onComplete={(data) => {
+            setBizData(data);
+            setStep(4);
+          }}
+        />
+      )}
+      {step === 4 && (
+        <ChartScreen
+          candidate={candidate}
+          savedData={chartData}
+          onComplete={(data) => {
+            setChartData(data);
+            setStep(5);
+          }}
+        />
+      )}
+      {step === 5 && (
+        <PMScreen
+          candidate={candidate}
+          savedData={pmData}
+          onComplete={(data) => {
+            setPmData(data);
+            setStep(6);
+          }}
+        />
+      )}
+      {step === 6 && <CompletionScreen candidate={candidate} email={email} sqlData={sqlData} bizData={bizData} chartData={chartData} pmData={pmData} onAdminAccess={()=>setStep(7)}/>}
+      {step === 7 && (
+        <ReportScreen
+          candidate={candidate}
+          email={email}
+          sqlData={sqlData}
+          bizData={bizData}
+          chartData={chartData}
+          pmData={pmData}
+        />
+      )}
+    </div>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
