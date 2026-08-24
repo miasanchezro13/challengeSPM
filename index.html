@@ -1,1574 +1,240 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Yape · Challenge Senior Product Manager – GPM Commerce</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Challenge — PM Yape</title>
 <style>
 :root{
-  --purple:#7C3AED;--purple-dark:#4C1D95;--purple-mid:#6D28D9;
-  --accent:#A78BFA;--neon:#C4B5FD;--cyan:#67E8F9;
-  --bg:#09051A;--bg2:#110930;--bg3:#1C1040;
-  --border:rgba(167,139,250,0.2);--border2:rgba(167,139,250,0.4);
-  --text:#EDE9FE;--muted:#9B7EC8;--dim:#6B5F8A;
-  --green:#34D399;--red:#F87171;--amber:#FCD34D;
-  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+  --purple:#7c3aed;--purple2:#a78bfa;--cyan:#67e8f9;--green:#34d399;--red:#f87171;--amber:#fcd34d;
+  --bg:#09051a;--card:#110930;--card2:#1c1040;--border:rgba(167,139,250,.22);
+  --text:#ede9fe;--muted:#b9a8db;--dim:#786a9b;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 10% 20%, rgba(109,40,217,.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(124,58,237,.14) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(103,232,249,.04) 0%, transparent 70%);
-}
-body::after{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(124,58,237,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.035) 1px,transparent 1px);
-  background-size:56px 56px;
-}
-
-/* ── LAYOUT ── */
-#root{position:relative;z-index:1;min-height:100vh}
-.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem}
-.card{background:rgba(17,9,48,.85);border:1px solid var(--border2);border-radius:20px;backdrop-filter:blur(16px);padding:2.5rem;width:100%;max-width:760px;box-shadow:0 0 60px rgba(124,58,237,.12),0 0 0 1px rgba(167,139,250,.06) inset}
-.card-wide{max-width:900px}
-
-/* ── YAPE LOGO ── */
-.logo{font-family:var(--mono);font-size:2rem;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-sm{font-size:1.1rem}
-
-/* ── BADGE ── */
-.badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(124,58,237,.2);border:1px solid rgba(167,139,250,.3);border-radius:100px;padding:.25rem .75rem;font-size:.72rem;font-weight:600;color:var(--neon);letter-spacing:.06em;text-transform:uppercase}
-.badge-green{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.3);color:var(--green)}
-.badge-amber{background:rgba(252,211,77,.1);border-color:rgba(252,211,77,.3);color:var(--amber)}
-
-/* ── TYPOGRAPHY ── */
-h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.1;letter-spacing:-.03em}
-h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
-h3{font-size:1.1rem;font-weight:600}
-.subtitle{color:var(--muted);font-size:1rem;line-height:1.6;margin-top:.5rem}
-.accent{color:var(--accent)}
-.cyan{color:var(--cyan)}
-.mono{font-family:var(--mono);font-size:.85rem}
-
-/* ── INPUTS ── */
-input[type=text],input[type=email]{
-  width:100%;background:rgba(28,16,64,.8);border:1px solid var(--border2);border-radius:10px;
-  padding:.85rem 1.1rem;color:var(--text);font-family:var(--sans);font-size:1rem;outline:none;
-  transition:border-color .2s,box-shadow .2s
-}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.15)}
-textarea.code-area{
-  width:100%;background:#0D0820;border:1px solid var(--border2);border-radius:10px;
-  padding:1rem;color:#E8D5FF;font-family:var(--mono);font-size:.82rem;line-height:1.7;
-  outline:none;resize:vertical;min-height:200px;
-  transition:border-color .2s,box-shadow .2s;tab-size:2
-}
-textarea.code-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
-textarea.prose-area{
-  width:100%;background:rgba(28,16,64,.8);border:1px solid var(--border2);border-radius:10px;
-  padding:1rem 1.2rem;color:var(--text);font-family:var(--sans);font-size:.95rem;line-height:1.7;
-  outline:none;resize:vertical;min-height:160px;transition:border-color .2s,box-shadow .2s
-}
-textarea.prose-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
-
-/* ── BUTTONS ── */
-.btn{
-  display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:10px;
-  padding:.8rem 1.6rem;font-family:var(--sans);font-size:.95rem;font-weight:600;
-  cursor:pointer;transition:all .18s;letter-spacing:.01em
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--purple-mid),var(--purple));color:#fff;
-  box-shadow:0 4px 20px rgba(109,40,217,.4)
-}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(109,40,217,.55)}
-.btn-primary:active{transform:translateY(0)}
-.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--accent)}
-.btn-outline:hover{background:rgba(167,139,250,.08);border-color:var(--accent)}
-.btn-ghost{background:rgba(167,139,250,.06);border:1px solid transparent;color:var(--muted)}
-.btn-ghost:hover{background:rgba(167,139,250,.12);color:var(--text)}
-.btn-sm{padding:.5rem 1rem;font-size:.85rem;border-radius:8px}
-.btn-green{background:linear-gradient(135deg,#059669,#10B981);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,.3)}
-.btn-green:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.45)}
-
-/* ── PROGRESS ── */
-.progress-bar{width:100%;height:4px;background:rgba(167,139,250,.1);border-radius:100px;overflow:hidden;margin-bottom:2.5rem}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple-mid),var(--cyan));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.steps-row{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
-.step-chip{display:flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.78rem;font-weight:600;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .2s}
-.step-chip.active{background:rgba(124,58,237,.2);border-color:var(--accent);color:var(--accent)}
-.step-chip.done{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3);color:var(--green)}
-
-/* ── SCHEMA TABLE ── */
-.schema-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.8rem;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
-.schema-table th{background:rgba(124,58,237,.2);color:var(--neon);padding:.6rem 1rem;text-align:left;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:.72rem}
-.schema-table td{padding:.55rem 1rem;border-top:1px solid var(--border);color:var(--text)}
-.schema-table tr:hover td{background:rgba(167,139,250,.04)}
-.type-tag{display:inline-block;background:rgba(103,232,249,.1);color:var(--cyan);border-radius:4px;padding:.1rem .4rem;font-size:.72rem}
-
-/* ── SCENARIO CARDS ── */
-.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
-@media(max-width:560px){.scenario-grid{grid-template-columns:1fr}}
-.scenario-card{border:1px solid var(--border);border-radius:14px;padding:1.25rem;background:rgba(28,16,64,.5)}
-.scenario-card.winner{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.04)}
-.scenario-card.loser{border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.03)}
-.metric-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(167,139,250,.1)}
-.metric-row:last-child{border-bottom:none}
-.metric-label{color:var(--muted);font-size:.85rem}
-.metric-val{font-weight:700;font-size:.95rem}
-
-/* ── REPORT ── */
-.report-block{background:#0D0820;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-top:1.5rem;font-family:var(--mono);font-size:.8rem;line-height:1.8;color:#D8B4FE;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow-y:auto}
-.report-section{margin-bottom:1rem}
-
-/* ── DEPLOY GUIDE ── */
-.deploy-step{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border:1px solid var(--border);border-radius:12px;background:rgba(28,16,64,.4)}
-.step-num{flex-shrink:0;width:32px;height:32px;background:linear-gradient(135deg,var(--purple-mid),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff}
-
-/* ── MISC ── */
-.divider{height:1px;background:var(--border);margin:1.5rem 0}
-.row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
-.col{display:flex;flex-direction:column;gap:.75rem}
-.label{font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
-.hint{font-size:.82rem;color:var(--dim);line-height:1.5;margin-top:.4rem}
-.saved-indicator{display:inline-flex;align-items:center;gap:.4rem;color:var(--green);font-size:.82rem;font-weight:600;opacity:0;transition:opacity .3s}
-.saved-indicator.show{opacity:1}
-.char-count{font-size:.75rem;color:var(--dim);text-align:right;margin-top:.3rem}
-.score-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--accent);background:rgba(124,58,237,.15)}
-.score-num{font-weight:700;font-size:1.2rem;color:var(--accent)}
-.score-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.animate-in{animation:fadeIn .4s ease both}
-.pulse{animation:pulse 2s ease infinite}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(167,139,250,.3);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(167,139,250,.5)}
-
-/* ── SYNTAX HIGHLIGHT (simulated) ── */
-.keyword{color:#C084FC}
-.fn{color:#67E8F9}
-.string{color:#86EFAC}
-.comment{color:#6B7280;font-style:italic}
-.num{color:#FCD34D}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(124,58,237,.17),transparent 35%),radial-gradient(circle at 85% 80%,rgba(103,232,249,.06),transparent 32%)}
+#app{position:relative;z-index:1;min-height:100vh}.screen{min-height:100vh;padding:24px;display:flex;align-items:center;justify-content:center}.shell{width:min(1080px,100%)}
+.card{background:rgba(17,9,48,.94);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 20px 70px rgba(0,0,0,.25)}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px}.logo{font:800 24px var(--mono);background:linear-gradient(135deg,var(--purple2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}.badge{display:inline-flex;border:1px solid var(--border);background:rgba(124,58,237,.14);color:var(--purple2);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.title{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:14px 0}.subtitle{color:var(--muted);line-height:1.65;max-width:760px}.progress{height:5px;background:rgba(167,139,250,.1);border-radius:999px;overflow:hidden;margin:18px 0 16px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--cyan));transition:width .25s}.steps{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.step{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);color:var(--dim)}.step.active{color:var(--purple2);border-color:var(--purple2);background:rgba(124,58,237,.12)}.step.done{color:var(--green);border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.08)}
+h1,h2,h3{margin:0 0 10px}h2{font-size:28px}h3{font-size:17px}.section{margin-top:20px}.section h3{color:var(--purple2)}
+.grid{display:grid;gap:12px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:800px){.grid2,.grid3{grid-template-columns:1fr}}
+.box{border:1px solid var(--border);border-radius:14px;background:rgba(28,16,64,.48);padding:16px}.box.soft{background:rgba(124,58,237,.07)}
+.kpi{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(167,139,250,.08)}.kpi:last-child{border-bottom:0}
+label{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}input,textarea,select{width:100%;background:#0d0820;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:11px 12px;font:inherit;outline:none}textarea{min-height:150px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--purple2);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
+.option{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(17,9,48,.45);cursor:pointer}.option:hover{border-color:rgba(167,139,250,.45)}.option input{width:auto;margin-top:3px}.option.selected{border-color:var(--purple2);background:rgba(124,58,237,.14)}
+.btns{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff}.ghost{background:transparent;color:var(--purple2);border:1px solid var(--border)}.btn:disabled{opacity:.45;cursor:not-allowed}.hint{font-size:12px;color:var(--dim)}
+.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px;border-bottom:1px solid rgba(167,139,250,.10);vertical-align:top}.table th{color:var(--purple2);text-align:left;background:rgba(124,58,237,.08)}.num{text-align:right;font-family:var(--mono)}
+.choice-card{position:relative}.choice-card input{position:absolute;opacity:0}.choice-card .inner{border:1px solid var(--border);border-radius:12px;padding:14px;height:100%;cursor:pointer}.choice-card input:checked + .inner{border-color:var(--purple2);background:rgba(124,58,237,.12)}
+.mono{font-family:var(--mono)}.tag{display:inline-block;padding:4px 7px;border-radius:6px;font:700 11px var(--mono);background:rgba(103,232,249,.08);color:var(--cyan)}
+.flow-diagram{display:flex;flex-direction:column;gap:10px}.flow-row{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr;gap:8px;align-items:stretch}.flow-node{border:1px solid var(--border);border-radius:12px;background:rgba(17,9,48,.72);padding:13px;display:flex;flex-direction:column;gap:7px;min-height:92px}.flow-node b{font-size:13px;color:var(--purple2)}.flow-node span{font-size:12px;line-height:1.5;color:var(--muted)}.flow-node.highlight{border-color:rgba(103,232,249,.35);background:rgba(103,232,249,.05)}.flow-node.highlight b{color:var(--cyan)}.flow-node.success{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.05)}.flow-node.success b{color:var(--green)}.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:22px}.flow-connector{text-align:center;color:var(--dim);font-size:20px}@media(max-width:800px){.flow-row{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg);height:18px}.flow-node{min-height:unset}}
+.callout{border-left:3px solid var(--cyan);padding:12px 14px;background:rgba(103,232,249,.05);border-radius:0 10px 10px 0;color:#d7f8fb;line-height:1.6}.warn{border-left-color:var(--amber);background:rgba(252,211,77,.04);color:#fff5c2}
+.report{white-space:pre-wrap;background:#0b061c;border:1px solid var(--border);border-radius:12px;padding:16px;font:13px/1.65 var(--mono);max-height:560px;overflow:auto}.footer{margin-top:12px;color:var(--dim);font-size:12px;text-align:center}
+.small{font-size:12px;color:var(--muted)}.required{color:var(--red)}.char-counter{font-size:11px;color:var(--dim);text-align:right;margin-top:5px;font-family:var(--mono)}
+.classify-btn{border:1px solid var(--border2);background:rgba(28,16,64,.55);color:var(--muted);border-radius:9px;padding:10px 8px;font-family:var(--sans);font-size:.76rem;font-weight:700;cursor:pointer;transition:.16s}.classify-btn:hover{border-color:var(--accent);color:var(--text);background:rgba(124,58,237,.12)}.classify-btn.selected{border-color:var(--accent);background:rgba(124,58,237,.24);color:var(--neon);box-shadow:0 0 0 2px rgba(167,139,250,.08) inset}@media(max-width:720px){.classification-row{grid-template-columns:1fr!important}.classification-row .classify-btn{width:100%}}
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="app"></div>
+<script>
+const STEPS = ['Registro','Detective','Subasta','Elefante','Sistema','Datos','AI Speech','Reporte'];
+const STORAGE = 'pm_yape_ai_challenge';
+const state = {step:0,name:'',email:'',answers:{}};
+const app=document.getElementById('app');
 
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(e){}}
+function resetPersistedState(){try{localStorage.removeItem(STORAGE);}catch(e){}}
+function setStep(n){state.step=n;save();render();initCharCounters();window.scrollTo({top:0,behavior:'smooth'});}
+function layout(body, subtitle=''){
+  const pct=Math.round((state.step/(STEPS.length-1))*100);
+  return `<div class="screen"><div class="shell"><div class="top"><div><div class="logo">yape</div><div class="badge">Product Challenge — PM Yape</div></div><div class="small">${state.step+1}/${STEPS.length}</div></div><div class="progress"><div style="width:${pct}%"></div></div><div class="steps">${STEPS.map((s,i)=>`<div class="step ${i===state.step?'active':''} ${i<state.step?'done':''}">${i<state.step?'✓ ':''}${s}</div>`).join('')}</div><div class="card">${body}</div><div class="footer"></div></div></div>`;
+}
+function btnNext(label='Guardar y continuar →'){return `<button class="btn primary" id="nextBtn" type="button">${label}</button>`}
+function btnBack(){return `<button class="btn ghost" id="backBtn" type="button">← Atrás</button>`}
+function requireText(id,min=200){const v=(document.getElementById(id)?.value||'').trim();return v.length>=min}
+function initCharCounters(){
+  document.querySelectorAll('textarea[data-min]').forEach(el=>{
+    const min=Number(el.dataset.min)||0;
+    let counter=el.nextElementSibling;
+    if(!counter || !counter.classList.contains('char-counter')){
+      counter=document.createElement('div');
+      counter.className='char-counter';
+      el.insertAdjacentElement('afterend',counter);
+    }
+    const max=el.id==='ai1'?1200:null;
+    const update=()=>{
+      const n=el.value.trim().length;
+      if(max!==null){
+        counter.textContent=`${n} / ${min}-${max} caracteres`;
+        counter.style.color=n>max?'var(--red)':n>=min?'var(--green)':'var(--dim)';
+      } else {
+        counter.textContent=`${n} / ${min} caracteres mínimos`;
+        counter.style.color=n>=min?'var(--green)':'var(--dim)';
+      }
+    };
+    if(!el.dataset.counterBound){el.addEventListener('input',update);el.dataset.counterBound='1';}
+    update();
+  });
+}
 
-// ── DATA ──────────────────────────────────────────────────────────────────
-const NSM_QUESTIONS = [
-  {
-    id: 'q1',
-    question: 'Caso: Yape quiere impulsar la vertical Promos. El equipo observa que el GMV crece, pero también aumentan los descuentos y la frecuencia de compra no mejora. ¿Cuál sería la mejor formulación de la North Star Metric?',
-    options: [
-      'GMV mensual total de Promos, porque resume el tamaño del negocio.',
-      'Número de usuarios que compran promos, porque mide adopción.',
-      'Número de usuarios que completan una compra de promo con valor percibido, de forma recurrente, porque conecta valor para usuario y crecimiento sostenible.',
-      'Monto total de descuentos otorgados, porque permite entender la inversión para generar crecimiento.'
-    ],
-    answer: 2,
-    rationale: 'Una buena NSM captura el valor central entregado al usuario y permite observar crecimiento sostenible; no debe reducirse a volumen financiero o una métrica de actividad aislada.'
-  },
-  {
-    id: 'q2',
-    question: 'El equipo propone como input de la NSM: "usuarios que vieron una promo", "usuarios que agregaron al carrito" y "usuarios que compraron". ¿Qué criterio usarías para decidir cuál es un input relevante del sistema de métricas?',
-    options: [
-      'Elegir el input con mayor volumen, porque tendrá mayor impacto estadístico.',
-      'Elegir el input que tenga una relación causal o predictiva consistente con la NSM y que el equipo pueda influenciar mediante producto.',
-      'Elegir todos los inputs por igual para evitar sesgos de priorización.',
-      'Elegir exclusivamente el input que el negocio pueda monetizar directamente.'
-    ],
-    answer: 1,
-    rationale: 'Los inputs deben explicar o movilizar la North Star y ser palancas accionables del producto; volumen o monetización por sí solos no bastan.'
-  },
-  {
-    id: 'q3',
-    question: 'Después de 2 meses, una iniciativa aumenta la NSM +12%, pero también genera un deterioro importante en reclamos y cancelaciones. Como Senior Product Manager, ¿qué conclusión es más adecuada?',
-    options: [
-      'La iniciativa es exitosa porque la NSM es la métrica principal y debe priorizarse sobre cualquier otra.',
-      'La iniciativa debe mantenerse sin cambios porque los guardrails se revisan solo trimestralmente.',
-      'La NSM muestra impacto positivo, pero el deterioro de guardrails obliga a investigar el trade-off antes de escalar; la decisión debe considerar valor de usuario y sostenibilidad.',
-      'La NSM deja de ser útil y debe reemplazarse por reclamos y cancelaciones.'
-    ],
-    answer: 2,
-    rationale: 'La NSM no reemplaza el resto del sistema de métricas. Los guardrails permiten detectar crecimiento que destruye valor o genera efectos secundarios no sostenibles.'
-  }
+function render(){
+ if(state.step===0)return renderReg();
+ if(state.step===1)return renderDetective();
+ if(state.step===2)return renderAuction();
+ if(state.step===3)return renderElephant();
+ if(state.step===4)return renderSystem();
+ if(state.step===5)return renderData();
+ if(state.step===6)return renderAISpeech();
+ return renderReport();
+}
+
+function renderReg(){
+ app.innerHTML=layout(`<div class="box soft"><h1 class="title">Product Challenge — PM Yape</h1><p class="subtitle">Secuencia de decisiones de producto sobre Promos de Commerce. El reto evalúa discovery, priorización, slicing, criterio técnico, análisis de datos y criterio sobre AI.</p></div><div class="section grid grid2"><div><label>Nombre completo <span class="required">*</span></label><input id="name" value="${esc(state.name)}" placeholder="Ej. Miguel Sanchez"></div><div><label>Email (opcional)</label><input id="email" value="${esc(state.email)}" placeholder="tu@email.com"></div></div><div class="section callout">La evaluación se resuelve individualmente y toda la información necesaria está dentro del challenge. No se califica automáticamente; el reporte final consolidará las respuestas entregadas.</div><div class="btns"><span class="hint">Tiempo sugerido: 30–45 minutos.</span><button class="btn primary" id="startBtn">Iniciar challenge →</button></div>`);
+ document.getElementById('startBtn').onclick=()=>{const n=document.getElementById('name').value.trim();if(!n){alert('Ingresa tu nombre para continuar.');return}state.name=n;state.email=document.getElementById('email').value.trim();setStep(1)};
+}
+
+function renderDetective(){
+ const a=state.answers.detective||{};
+ app.innerHTML=layout(`<span class="badge">1 · Detective del problema</span><h2>¿Qué problema investigarías primero?</h2><p class="subtitle">Usa solo la evidencia disponible. Distingue datos, insights, problemas e hipótesis dentro de la experiencia de Promos.</p><div class="section grid grid2"><div class="box"><h3>Datos del funnel de Promos</h3><div class="kpi"><span>Entran a Promos</span><b>100</b></div><div class="kpi"><span>Ven al menos una promo</span><b>76</b></div><div class="kpi"><span>Abren detalle de una promo</span><b>63</b></div><div class="kpi"><span>Inician compra</span><b>58</b></div><div class="kpi"><span>Intentan pagar</span><b>49</b></div><div class="kpi"><span>Compra de Promo exitosa</span><b>46</b></div><div class="kpi"><span>Compra de promo al mes siguiente</span><b>32%</b></div><div class="kpi"><span>Contactos CX sobre promociones, compra o redención</span><b>28%</b></div></div><div class="box"><h3>Voces de usuarios</h3><p>“No encuentro promos que realmente me interesen.”</p><p>“Cuando veo una promo, no siempre entiendo qué incluye.”</p><p>“Se me pasan las promos antes de usarlas.”</p><p>“No sé si esta promo todavía está disponible.”</p><p>“Me da miedo comprar y después no poder usar la promo.”</p></div></div><div class="section"><label>Problema 1 que investigarías · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: problema concreto + evidencia del caso + por qué merece investigación, sin proponer todavía una solución.</div><textarea id="d1" data-min="200" placeholder="Describe el problema observado, qué evidencia lo sustenta y qué consecuencia tiene para usuario o negocio.">${esc(a.p1)}</textarea></div><div class="section"><label>Problema 2 que investigarías · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: un segundo problema distinto, sustentado por evidencia y claramente separado del primero.</div><textarea id="d2" data-min="200" placeholder="Describe otro problema, la señal que lo sustenta y por qué merece investigación.">${esc(a.p2)}</textarea></div><div class="section"><label>3 datos adicionales · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: exactamente tres datos adicionales + qué incertidumbre ayudaría a resolver cada uno.</div><textarea id="d4" data-min="200" placeholder="Dato 1 y para qué; dato 2 y para qué; dato 3 y para qué.">${esc(a.more)}</textarea></div><div class="btns">${btnBack()}${btnNext()}</div>`);
+ document.getElementById('backBtn').onclick=()=>setStep(0);document.getElementById('nextBtn').onclick=()=>{if(!requireText('d1')||!requireText('d2')||!requireText('d4')){alert('Cada respuesta abierta requiere al menos 200 caracteres.');return}state.answers.detective={p1:document.getElementById('d1').value,p2:document.getElementById('d2').value,more:document.getElementById('d4').value};setStep(2)};
+}
+
+
+const initiatives=[
+ ['Recordatorios de promos',20,'Avisos sobre promos relevantes antes de que expiren.'],
+ ['Personalización de promos',35,'Ordenar y recomendar promos según intereses y comportamiento.'],
+ ['Favoritos',15,'Guardar promos o marcas frecuentes para encontrarlas después.'],
+ ['Mejor detalle de promo',15,'Hacer más claros beneficio, condiciones, vigencia y cómo usar la promo.'],
+ ['Resiliencia de compra',30,'Reducir fallos y mejorar recuperación del flujo de compra o redención.'],
+ ['Integrar nuevos partners',35,'Aumentar la oferta y cobertura de promos disponibles.'],
+ ['Cashback',25,'Agregar un incentivo económico para aumentar uso o recurrencia.'],
+ ['Migración técnica',40,'Modernizar una base técnica para reducir dependencia o riesgo futuro.']
 ];
+function renderAuction(){
+ const a=state.answers.auction||{sel:[]};
+ app.innerHTML=layout(`<span class="badge">2 · Subasta de oportunidades</span><h2>¿Dónde invertirías la capacidad?</h2><p class="subtitle">Dispones de <b>100 puntos</b> de capacidad. Selecciona iniciativas y justifica el valor esperado. Luego tendrás que reaccionar a una restricción externa.</p><div class="section grid grid3">${initiatives.map(([n,c,d])=>`<label class="choice-card"><input type="checkbox" class="initCheck" value="${n}" data-cost="${c}" ${a.sel?.includes(n)?'checked':''}><div class="inner"><div style="display:flex;justify-content:space-between;gap:8px"><b>${n}</b><span class="tag">${c} pts</span></div><div class="small" style="margin-top:8px;line-height:1.5">${d}</div></div></label>`).join('')}</div><div class="section box"><div style="display:flex;justify-content:space-between"><b>Capacidad seleccionada</b><b id="totalCost">0 / 100</b></div><div class="small" style="margin-top:6px">Los puntos representan capacidad disponible del equipo; el límite no se puede exceder.</div></div><div class="section"><label>Problema + métrica · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: para las iniciativas elegidas, explica qué problema atacas y qué métrica esperas mover.</div><textarea id="a1" data-min="200" placeholder="Relaciona cada apuesta con el problema que resuelve y la métrica que esperas impactar.">${esc(a.just)}</textarea></div><div class="section"><label>Qué NO harías · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: iniciativas que dejas fuera + criterio de priorización, trade-off o restricción que lo explica.</div><textarea id="a2" data-min="200" placeholder="Explica qué descartas y por qué no usarías capacidad en esas iniciativas.">${esc(a.no)}</textarea></div><div class="section callout warn"><b>Nueva información:</b> Marketing informa que ya tiene comprometida una campaña de <b>Cashback</b> asociada a Promos. Debes incluir Cashback. No recibes capacidad adicional.</div><div class="section"><label>Repriorización por Cashback · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: qué cambias, qué sacrificas o renegocias y por qué mantienes o cambias el objetivo.</div><textarea id="a3" data-min="200" placeholder="Explica el nuevo trade-off y qué iniciativa(s) salen o se reducen.">${esc(a.change)}</textarea></div><div class="btns">${btnBack()}${btnNext()}</div>`);
+ const checks=[...document.querySelectorAll('.initCheck')];
+ const refresh=()=>{let t=checks.filter(c=>c.checked).reduce((s,c)=>s+Number(c.dataset.cost),0);document.getElementById('totalCost').textContent=t+' / 100';document.getElementById('totalCost').style.color=t>100?'var(--red)':'var(--green)';};
+ checks.forEach(c=>c.addEventListener('change',refresh));refresh();
+ document.getElementById('backBtn').onclick=()=>setStep(1);document.getElementById('nextBtn').onclick=()=>{const selected=checks.filter(c=>c.checked);const total=selected.reduce((s,c)=>s+Number(c.dataset.cost),0);if(!selected.length||total>100){alert(total>100?'La selección supera 100 puntos de capacidad. Ajusta el plan.':'Selecciona al menos una iniciativa.');return}if(!requireText('a1')||!requireText('a2')||!requireText('a3')){alert('Cada respuesta abierta requiere al menos 200 caracteres.');return}state.answers.auction={sel:selected.map(c=>c.value),just:document.getElementById('a1').value,no:document.getElementById('a2').value,change:document.getElementById('a3').value,total};setStep(3)};
+}
 
-const SCENARIO_METRICS = [
-  { label: 'Precio al cliente',   a: 'S/ 100',      b: 'S/ 120 (3 cuotas)' },
-  { label: 'Cuota mensual',       a: '—',           b: 'S/ 40 / mes' },
-  { label: 'Tasa de conversión',  a: '↓ Baja',      b: '↑ Alta' },
-  { label: 'Ticket promedio',     a: 'S/ 100',      b: 'S/ 120' },
-  { label: 'Cobro inmediato',     a: 'S/ 100 hoy',  b: 'S/ 40 × 3 meses' },
+
+const components=[
+ ['Señales de preferencia','Usar comportamiento disponible —por ejemplo vistas, clics o compras previas— para inferir qué tipos de promos podrían ser relevantes.'],
+ ['Elegibilidad de promos','Evitar recomendar promos que el usuario no puede comprar, que no están vigentes o que no están disponibles para su segmento.'],
+ ['Ranking personalizado','Ordenar las promos disponibles según una estimación de relevancia para cada usuario.'],
+ ['Feed personalizado','Mostrar el ranking dentro de una experiencia visible de Promos y permitir que el usuario explore alternativas.'],
+ ['Fallback general','Mostrar un catálogo no personalizado cuando no exista suficiente información del usuario o falle la personalización.'],
+ ['Feedback de relevancia','Permitir capturar señales explícitas o implícitas sobre si las recomendaciones resultan útiles para mejorar el aprendizaje.'],
+ ['Medición del experimento','Instrumentar exposición, interacción, compra y recurrencia para comparar la experiencia personalizada contra una alternativa de control.'],
+ ['Manejo de errores','Definir qué ocurre si el ranking no responde, entrega resultados inválidos o una promo deja de estar disponible.'],
+ ['Favoritos y recordatorios','Permitir guardar promos y recibir recordatorios para facilitar una compra posterior.'],
+ ['Dashboard operativo','Dar visibilidad interna sobre desempeño del ranking, errores y principales métricas del experimento.']
 ];
-
-const SQL_HINT = '';
-
-// ── COMPONENTS ────────────────────────────────────────────────────────────
-
-function ProgressHeader({ step, total, steps }) {
-  const pct = (step / total) * 100;
-  return (
-    <div style={{width:'100%',maxWidth:760,marginBottom:'1.5rem'}}>
-      <div className="progress-bar">
-        <div className="progress-fill" style={{width:`${pct}%`}}/>
-      </div>
-      <div className="steps-row">
-        {steps.map((s,i) => (
-          <div key={i} className={`step-chip ${i+1 < step ? 'done' : i+1 === step ? 'active' : ''}`}>
-            {i+1 < step ? '✓' : <span style={{fontFamily:'Space Mono',fontWeight:700,fontSize:'.72rem'}}>{i+1}</span>}
-            {s}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function renderElephant(){
+ const a=state.answers.elephant||{mvp:[],later:[],no:[]};
+ const selected={};
+ (a.mvp||[]).forEach(x=>selected[x]='mvp');
+ (a.later||[]).forEach(x=>selected[x]='later');
+ (a.no||[]).forEach(x=>selected[x]='no');
+ const rows=components.map(([c,d],i)=>`<div class="box" style="padding:16px;margin-bottom:10px"><div style="display:grid;grid-template-columns:minmax(260px,1.5fr) minmax(300px,1.7fr);gap:18px;align-items:center"><div><b>${i+1}. ${c}</b><div class="small" style="margin-top:5px;line-height:1.5">${d}</div></div><div class="classification-row" data-component="${esc(c)}" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><button type="button" class="classify-btn ${selected[c]==='mvp'?'selected':''}" data-value="mvp">MVP</button><button type="button" class="classify-btn ${selected[c]==='later'?'selected':''}" data-value="later">DESPUÉS</button><button type="button" class="classify-btn ${selected[c]==='no'?'selected':''}" data-value="no">NO NECESARIO</button></div></div></div>`).join('');
+ app.innerHTML=layout(`<span class="badge">3 · Corta el elefante</span><h2>Convierte una apuesta de 5 meses en un experimento de 6 semanas</h2><p class="subtitle">La apuesta es <b>Personalización de Promos</b>: mostrar primero promos que tengan mayor probabilidad de ser relevantes para cada usuario. Tienes 6 semanas para aprender si puede aumentar la compra recurrente de promos. <b>1 sprint = 2 semanas</b>, por lo que dispones de 3 sprints.</p><div class="section box"><b>Clasifica cada capacidad</b><div class="small" style="margin-top:6px">Para cada capacidad elige una sola opción: <b>MVP</b> si es necesaria para validar la hipótesis en 6 semanas; <b>DESPUÉS</b> si aporta valor pero puede esperar; o <b>NO NECESARIO</b> si no es requerida para este aprendizaje.</div></div><div class="section">${rows}</div><div class="section"><label>Sprint 1 · mínimo 100 caracteres <span class="required">*</span></label><div class="small">Expectativa: qué construirías primero y qué aprendizaje habilita.</div><textarea id="e1" data-min="100" placeholder="Prioridad del sprint, alcance mínimo y aprendizaje esperado.">${esc(a.s1)}</textarea></div><div class="section"><label>Sprint 2 · mínimo 100 caracteres <span class="required">*</span></label><div class="small">Expectativa: qué construirías después y qué dependencia o aprendizaje desbloquea.</div><textarea id="e2" data-min="100" placeholder="Qué entra en el sprint 2 y por qué.">${esc(a.s2)}</textarea></div><div class="section"><label>Sprint 3 · mínimo 100 caracteres <span class="required">*</span></label><div class="small">Expectativa: qué cerrarías, probarías o medirías antes de tomar la decisión.</div><textarea id="e3" data-min="100" placeholder="Qué haces en el sprint 3 para llegar a una decisión.">${esc(a.s3)}</textarea></div><div class="section"><label>Aprendizaje de salida · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: evidencia concreta que te permita continuar, iterar o detener la apuesta.</div><textarea id="e4" data-min="200" placeholder="Qué tendría que ocurrir en las 6 semanas para tomar cada decisión.">${esc(a.learn)}</textarea></div><div class="btns">${btnBack()}${btnNext()}</div>`);
+ document.querySelectorAll('.classification-row').forEach(row=>{
+   row.querySelectorAll('.classify-btn').forEach(btn=>btn.addEventListener('click',()=>{
+     row.querySelectorAll('.classify-btn').forEach(b=>b.classList.remove('selected'));
+     btn.classList.add('selected');
+   }));
+ });
+ document.getElementById('backBtn').onclick=()=>setStep(2);
+ document.getElementById('nextBtn').onclick=()=>{
+   const groups={mvp:[],later:[],no:[]};
+   const rows=[...document.querySelectorAll('.classification-row')];
+   for(const row of rows){
+     const choice=row.querySelector('.classify-btn.selected');
+     if(!choice){alert('Clasifica las 10 capacidades antes de continuar. Cada una debe tener una opción: MVP, Después o No necesario.');return}
+     groups[choice.dataset.value].push(row.dataset.component);
+   }
+   if(!requireText('e1',100)||!requireText('e2',100)||!requireText('e3',100)||!requireText('e4',200)){alert('Completa todas las respuestas abiertas con los mínimos indicados.');return}
+   state.answers.elephant={...groups,s1:document.getElementById('e1').value,s2:document.getElementById('e2').value,s3:document.getElementById('e3').value,learn:document.getElementById('e4').value};setStep(4)
+ };
 }
 
-// ── SCREEN 1: Welcome ──────────────────────────────────────────────────────
-function WelcomeScreen({ onStart }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [shake, setShake] = useState(false);
-
-  const handleStart = () => {
-    if (!name.trim()) { setShake(true); setTimeout(()=>setShake(false),500); return; }
-    onStart(name.trim(), email.trim());
-  };
-
-  return (
-    <div className="screen">
-      <div className="card animate-in" style={{textAlign:'center'}}>
-        {/* Logo */}
-        <div style={{marginBottom:'1.5rem'}}>
-          <div className="logo" style={{marginBottom:'.5rem'}}>yape</div>
-          <div className="badge">GPM Commerce · Talent Challenge</div>
-        </div>
-
-        {/* Title */}
-        <h1 style={{marginBottom:'.75rem',lineHeight:1.15}}>
-          Senior Product Manager<br/>
-          <span className="accent">Commerce</span> – GPM Commerce
-        </h1>
-        <p className="subtitle" style={{maxWidth:520,margin:'0 auto 2rem'}}>
-          Tu misión: <strong style={{color:'var(--text)'}}>maximizar el GMV y la experiencia del usuario</strong> mediante análisis de datos, diseño de iniciativas y experimentación basada en hipótesis en las verticales de Commerce.
-        </p>
-
-        {/* Role pillars */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'.75rem',marginBottom:'2rem',textAlign:'left'}}>
-          {[
-            {icon:'⚡', label:'Product Analytics', desc:'Convierte datos en decisiones y define métricas de producto'},
-            {icon:'🧪', label:'Product Discovery', desc:'Hipótesis, experimentos y decisiones: escalar, iterar, descartar'},
-            {icon:'📊', label:'Product Strategy', desc:'North Star, GMV, conversión, trade-offs y outcomes'},
-          ].map((p,i) => (
-            <div key={i} style={{background:'rgba(124,58,237,.1)',border:'1px solid var(--border)',borderRadius:12,padding:'1rem'}}>
-              <div style={{fontSize:'1.4rem',marginBottom:'.4rem'}}>{p.icon}</div>
-              <div style={{fontWeight:700,fontSize:'.88rem',marginBottom:'.25rem',color:'var(--neon)'}}>{p.label}</div>
-              <div style={{fontSize:'.78rem',color:'var(--muted)',lineHeight:1.4}}>{p.desc}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="divider"/>
-
-        {/* Form */}
-        <div style={{textAlign:'left',display:'flex',flexDirection:'column',gap:'1rem'}}>
-          <div>
-            <div className="label">Tu nombre completo *</div>
-            <input
-              type="text"
-              placeholder="ej. María García López"
-              value={name}
-              onChange={e=>setName(e.target.value)}
-              onKeyDown={e=>e.key==='Enter'&&handleStart()}
-              style={shake?{borderColor:'var(--red)',animation:'fadeIn .1s ease'}:{}}
-            />
-            {shake && <div style={{color:'var(--red)',fontSize:'.8rem',marginTop:'.3rem'}}>Por favor ingresa tu nombre para continuar</div>}
-          </div>
-          <div>
-            <div className="label">Email (opcional, para el reporte)</div>
-            <input type="email" placeholder="tu@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleStart()}/>
-          </div>
-          <button className="btn btn-primary" style={{width:'100%',justifyContent:'center',padding:'1rem',fontSize:'1rem'}} onClick={handleStart}>
-            Iniciar el Challenge →
-          </button>
-        </div>
-
-        <div style={{marginTop:'1.5rem',display:'flex',justifyContent:'center',gap:'1.5rem',color:'var(--dim)',fontSize:'.78rem'}}>
-          <span>⏱ ~20–30 min</span>
-          <span>·</span>
-          <span>🧩 2 módulos</span>
-          <span>·</span>
-          <span>📄 Reporte descargable</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── SCREEN 2: NORTH STAR METRIC MODULE ─────────────────────────────────────
-function SQLScreen({ candidate, onComplete, savedData }) {
-  const [answers, setAnswers] = useState(savedData?.answers || {});
-
-  const allAnswered = NSM_QUESTIONS.every(q => answers[q.id] !== undefined);
-
-  const handleOption = (questionId, optionIndex) => {
-    setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
-  };
-
-  const handleContinue = () => {
-    const complete = NSM_QUESTIONS.every(q => answers[q.id] !== undefined);
-    if (!complete) return;
-    const correct = NSM_QUESTIONS.filter(q => answers[q.id] === q.answer).length;
-    const score = Math.round((correct / NSM_QUESTIONS.length) * 100);
-    onComplete({ answers: { ...answers }, score });
-  };
-
-  return (
-    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
-      <ProgressHeader step={2} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
-      <div className="card card-wide animate-in">
-        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
-          <div>
-            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 1 · Product Thinking</div>
-            <h2>North Star Metric</h2>
-            <p className="subtitle">Resuelve las 3 preguntas a partir de un mismo caso y demuestra criterio para construir un sistema de métricas de producto.</p>
-          </div>
-          <div className="score-circle">
-            <div className="score-num">1/4</div>
-            <div className="score-lbl">módulo</div>
-          </div>
-        </div>
-
-        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.15rem 1.25rem',marginBottom:'1.5rem',fontSize:'.9rem',lineHeight:1.7,color:'var(--muted)'}}>
-          <strong style={{color:'var(--text)'}}>Caso:</strong> Yape quiere acelerar el crecimiento de <span style={{color:'var(--accent)',fontWeight:700}}>Promos</span> como una experiencia recurrente para sus usuarios. El negocio crece en GMV, pero existe presión por descuentos, baja recurrencia y señales de deterioro en la experiencia. Como Senior Product Manager, debes definir cómo medirías el valor creado por el producto y cómo separarías crecimiento saludable de crecimiento artificial.
-        </div>
-
-        <div style={{display:'flex',flexDirection:'column',gap:'1rem',marginBottom:'1.5rem'}}>
-          {NSM_QUESTIONS.map((q, qi) => {
-            const selected = answers[q.id];
-            return (
-              <div key={q.id} style={{border:'1px solid var(--border)',borderRadius:12,padding:'1.1rem 1.15rem',background:'rgba(28,16,64,.42)'}}>
-                <div style={{display:'flex',gap:'.7rem',alignItems:'flex-start',marginBottom:'.9rem'}}>
-                  <span style={{background:'var(--purple-dark)',borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'.75rem',fontWeight:800,flexShrink:0}}>{qi+1}</span>
-                  <div style={{fontSize:'.92rem',fontWeight:600,lineHeight:1.55,color:'var(--text)'}}>{q.question}</div>
-                </div>
-                <div style={{display:'flex',flexDirection:'column',gap:'.55rem',paddingLeft:'2.1rem'}}>
-                  {q.options.map((opt, oi) => {
-                    const isSelected = selected === oi;
-                    return (
-                      <button
-                        key={oi}
-                        type="button"
-                        onClick={() => handleOption(q.id, oi)}
-                        style={{
-                          display:'flex',alignItems:'flex-start',gap:'.7rem',width:'100%',textAlign:'left',
-                          padding:'.7rem .8rem',borderRadius:9,cursor:'pointer',
-                          border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border)',
-                          background: isSelected ? 'rgba(124,58,237,.16)' : 'rgba(17,9,48,.38)',
-                          color:'var(--text)',fontFamily:'var(--sans)',fontSize:'.84rem',lineHeight:1.5
-                        }}
-                      >
-                        <span style={{width:22,height:22,borderRadius:'50%',border:isSelected?'6px solid var(--accent)':'2px solid var(--dim)',flexShrink:0,marginTop:1,boxSizing:'border-box'}} />
-                        <span>{String.fromCharCode(65+oi)}. {opt}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
-          <button
-            className={`btn ${allAnswered ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={handleContinue}
-            disabled={!allAnswered}
-            style={{opacity:allAnswered?1:.5}}
-          >
-            Continuar al módulo 2 →
-          </button>
-          {!allAnswered && <span className="hint">Responde las 3 preguntas para continuar.</span>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── SCREEN 3: Business Case ────────────────────────────────────────────────
-function BusinessScreen({ candidate, onComplete, savedData }) {
-  const [answer, setAnswer] = useState(savedData?.answer || '');
-  const [saved, setSaved] = useState(false);
-  const minChars = 120;
-
-  const handleSave = () => {
-    if (answer.trim().length < minChars) return;
-    setSaved(true);
-    setTimeout(()=>setSaved(false), 2500);
-    onComplete({ answer });
-  };
-
-  const progress = Math.min(100, (answer.trim().length / minChars) * 100);
-  const isReady  = answer.trim().length >= minChars;
-
-  return (
-    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
-      <ProgressHeader step={3} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
-      <div className="card card-wide animate-in">
-        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
-          <div>
-            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 2 · Caso de Pricing</div>
-            <h2>Caso: Pricing & Cuotas</h2>
-            <p className="subtitle">Evalúa el impacto económico, estratégico y de experiencia de una decisión de producto en Commerce.</p>
-          </div>
-          <div className="score-circle">
-            <div className="score-num">2/2</div>
-            <div className="score-lbl">módulo</div>
-          </div>
-        </div>
-
-        {/* Context */}
-        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.25rem',marginBottom:'1.5rem',fontSize:'.9rem',lineHeight:1.65,color:'var(--muted)'}}>
-          <strong style={{color:'var(--text)'}}>Contexto:</strong> El equipo GPM Commerce está evaluando una iniciativa en la vertical <span style={{color:'var(--accent)',fontWeight:600}}>Tienda</span>. Se comparan dos configuraciones de precio para el mismo producto digital.
-        </div>
-
-        {/* Scenarios */}
-        <div className="scenario-grid">
-          <div className="scenario-card loser">
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
-              <div style={{fontWeight:700,fontSize:'1rem'}}>Escenario A</div>
-              <div className="badge-amber badge">Contado</div>
-            </div>
-            {SCENARIO_METRICS.map((m,i) => (
-              <div className="metric-row" key={i}>
-                <span className="metric-label">{m.label}</span>
-                <span className="metric-val" style={{color: i===2?'var(--red)':'var(--text)'}}>{m.a}</span>
-              </div>
-            ))}
-          </div>
-          <div className="scenario-card winner">
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
-              <div style={{fontWeight:700,fontSize:'1rem'}}>Escenario B</div>
-              <div className="badge-green badge">3 Cuotas sin interés</div>
-            </div>
-            {SCENARIO_METRICS.map((m,i) => (
-              <div className="metric-row" key={i}>
-                <span className="metric-label">{m.label}</span>
-                <span className="metric-val" style={{color: i===2?'var(--green)':'var(--text)'}}>{m.b}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Question */}
-        <div style={{background:'rgba(103,232,249,.05)',border:'1px solid rgba(103,232,249,.2)',borderRadius:12,padding:'1.25rem',marginBottom:'1.5rem'}}>
-          <div style={{fontWeight:700,color:'var(--cyan)',marginBottom:'.75rem',fontSize:'.9rem',textTransform:'uppercase',letterSpacing:'.04em'}}>🧠 Pregunta Crítica</div>
-          <p style={{fontSize:'.92rem',lineHeight:1.65}}>
-            Como Senior Product Manager, ¿bajo qué condiciones el Escenario B podría generar <strong style={{color:'var(--green)'}}>más valor</strong> o <strong style={{color:'var(--red)'}}>destruir valor</strong> frente al Escenario A? Explica los trade-offs entre conversión, ticket, caja, riesgo y experiencia, y qué decisión tomarías.
-          </p>
-
-        </div>
-
-        {/* Text area */}
-        <div style={{marginBottom:'1rem'}}>
-          <div className="label">✍️ Tu análisis</div>
-          <textarea
-            className="prose-area"
-            value={answer}
-            onChange={e=>setAnswer(e.target.value)}
-            placeholder="Estructura una decisión de producto: explicita supuestos, trade-offs, métricas de éxito y guardrails; considera valor presente neto y concluye con una recomendación y el experimento o evidencia que necesitarías para ejecutarla..."
-            style={{minHeight:190}}
-          />
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'.4rem'}}>
-            <div style={{flex:1,marginRight:'1rem'}}>
-              <div style={{height:3,background:'rgba(167,139,250,.1)',borderRadius:100,overflow:'hidden'}}>
-                <div style={{height:'100%',width:`${progress}%`,background:isReady?'var(--green)':'var(--accent)',borderRadius:100,transition:'width .3s,background .3s'}}/>
-              </div>
-            </div>
-            <div className="char-count">{answer.trim().length}/{minChars} chars mínimo</div>
-          </div>
-        </div>
-
-        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
-          <button
-            className={`btn ${isReady ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={handleSave}
-            disabled={!isReady}
-            style={{opacity: isReady ? 1 : .5}}
-          >
-            💾 Guardar Análisis
-          </button>
-          {savedData?.answer && (
-            <button className="btn btn-green" onClick={()=>onComplete({answer})}>
-              Ver mi Reporte →
-            </button>
-          )}
-          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Análisis guardado</span>
-        </div>
-      </div>
-    </div>
-  );
+function renderSystem(){
+ const a=state.answers.system||{};
+ app.innerHTML=layout(`<span class="badge">4 · Arma el sistema</span><h2>Razonamiento técnico desde Producto</h2><p class="subtitle">No necesitas conocer la arquitectura real. Queremos observar cómo razonas sobre estados, fallos, reintentos y experiencia en una compra In App de Promo.</p><div class="section box soft"><h3 style="margin-bottom:12px">Flujo funcional de una compra In App</h3><p class="small" style="margin:0 0 14px">Usa este diagrama como contexto del escenario. Representa el flujo funcional esperado; no necesitas describirlo nuevamente.</p><div class="flow-diagram"><div class="flow-row"><div class="flow-node"><b>1. Promo seleccionada</b><span>El usuario entra a una promo y revisa el beneficio, precio, condiciones y términos.</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>2. Detalle y condiciones</b><span>El usuario valida la información y decide si quiere continuar con la compra.</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>3. Intención / confirmación</b><span>Inicia la compra y puede revisar o confirmar los datos de la operación.</span></div></div><div class="flow-connector">↓</div><div class="flow-row"><div class="flow-node"><b>4. Pago</b><span>El pago ocurre dentro del journey de Promos; puede existir una interacción como QR o código.</span></div><div class="flow-arrow">→</div><div class="flow-node highlight"><b>5. Validación</b><span>El sistema procesa y valida el pago. Mientras esto ocurre, la compra aún no debe considerarse exitosa.</span></div><div class="flow-arrow">→</div><div class="flow-node success"><b>6. Compra confirmada</b><span>El usuario recibe confirmación y un voucher, código o equivalente para redimir la promo.</span></div></div></div><div style="margin-top:18px;padding:18px 20px;border:2px solid var(--amber);border-radius:14px;background:rgba(252,211,77,.10);box-shadow:0 0 24px rgba(252,211,77,.08);font-size:1.08rem;line-height:1.65;color:var(--text)"><div style="font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:6px">⚠ Escenario evaluado · Core del reto</div><b>El usuario presiona <span style="color:var(--amber)">Comprar</span>, permanece en <span style="color:var(--amber)">“Procesando…”</span> durante 10 segundos y vuelve a presionar <span style="color:var(--amber)">Comprar</span>.</b></div></div><div class="section callout"><b>Tu foco:</b> a partir del flujo anterior, razona qué puede estar ocurriendo, qué riesgos aparecen, qué necesitas entender del sistema y cómo debería responder la experiencia ante la incertidumbre.</div><div class="section grid grid2"><div><label>Qué podría estar ocurriendo · mínimo 150 caracteres <span class="required">*</span></label><div class="small">Expectativa: formula una o más hipótesis sobre el estado de la compra, el pago o la comunicación entre componentes.</div><textarea id="s2" data-min="150" placeholder="Explica qué hipótesis investigarías primero y por qué.">${esc(a.what)}</textarea></div><div><label>Riesgos · mínimo 150 caracteres <span class="required">*</span></label><div class="small">Expectativa: identifica riesgos para dinero, orden, experiencia, consistencia o doble ejecución y explica sus consecuencias.</div><textarea id="s3" data-min="150" placeholder="Qué podría salir mal, a quién afecta y por qué.">${esc(a.risk)}</textarea></div><div><label>Preguntas al Tech Lead · mínimo 150 caracteres <span class="required">*</span></label><div class="small">Expectativa: formula preguntas que reduzcan incertidumbre técnica relevante para una decisión de Producto.</div><textarea id="s4" data-min="150" placeholder="Qué necesitas entender del sistema antes de decidir.">${esc(a.tech)}</textarea></div><div><label>Experiencia del usuario · mínimo 150 caracteres <span class="required">*</span></label><div class="small">Expectativa: define qué debería ver, saber o poder hacer el usuario mientras la compra está incierta.</div><textarea id="s5" data-min="150" placeholder="Estados, mensajes, acciones disponibles y límites.">${esc(a.ux)}</textarea></div></div><div class="btns">${btnBack()}${btnNext()}</div>`);
+ document.getElementById('backBtn').onclick=()=>setStep(3);document.getElementById('nextBtn').onclick=()=>{if(!requireText('s2',150)||!requireText('s3',150)||!requireText('s4',150)||!requireText('s5',150)){alert('Completa todas las respuestas abiertas con los mínimos indicados.');return}state.answers.system={what:document.getElementById('s2').value,risk:document.getElementById('s3').value,tech:document.getElementById('s4').value,ux:document.getElementById('s5').value};setStep(5)};
 }
 
 
-// ── SALES DATA (simulated ecommerce seasonality + YoY growth) ─────────────
-const MONTHS_LABELS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
-// 2025: full year – ecommerce seasonality baseline (index 100 = avg month)
-// High: Nov/Dic (Black Friday, Navidad), Feb (San Valentín), May (Día de la Madre)
-// Low: Mar, Jun, Sep
-const SEASON_BASE = [88, 102, 78, 85, 110, 76, 82, 90, 74, 92, 148, 162];
-
-// YoY growth per month: random between 5%–50%, fixed seed for consistency
-const YOY_GROWTH = [0.18, 0.32, 0.12, 0.27, 0.45, 0.09, 0.21, 0.38, 0.15, 0.29, 0.22, 0.41];
-
-const BASE_GMV = 420000; // soles, base monthly average 2025
-
-const SALES_2025 = SEASON_BASE.map(s => Math.round(BASE_GMV * s / 100));
-const SALES_2026 = SEASON_BASE.map((s, i) =>
-  i < 5  // Jan–May 2026 only
-    ? Math.round(BASE_GMV * s / 100 * (1 + YOY_GROWTH[i]))
-    : null
-);
-
-// ── CHART SCREEN ──────────────────────────────────────────────────────────
-function ChartScreen({ candidate, onComplete, savedData }) {
-  const [answer, setAnswer] = useState(savedData?.answer || '');
-  const [saved, setSaved] = useState(false);
-  const [tooltip, setTooltip] = useState(null);
-  const minChars = 150;
-  const isReady = answer.trim().length >= minChars;
-  const progress = Math.min(100, (answer.trim().length / minChars) * 100);
-
-  const handleSave = () => {
-    if (!isReady) return;
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-    onComplete({ answer });
-  };
-
-  // Chart dimensions
-  const W = 620, H = 260, PAD = { top: 20, right: 20, bottom: 40, left: 68 };
-  const chartW = W - PAD.left - PAD.right;
-  const chartH = H - PAD.top  - PAD.bottom;
-
-  const allVals = [...SALES_2025, ...SALES_2026.filter(Boolean)];
-  const maxVal  = Math.max(...allVals) * 1.12;
-  const minVal  = 0;
-
-  const xStep   = chartW / 11;          // 12 months, 11 gaps
-  const yScale  = (v) => chartH - ((v - minVal) / (maxVal - minVal)) * chartH;
-  const xPos    = (i) => PAD.left + i * xStep;
-
-  // Y axis grid lines
-  const yTicks = [0, 200000, 400000, 600000, 800000].filter(v => v <= maxVal * 1.05);
-
-  // Build SVG path
-  const path2025 = SALES_2025.map((v, i) =>
-    `${i === 0 ? 'M' : 'L'}${xPos(i).toFixed(1)},${(PAD.top + yScale(v)).toFixed(1)}`
-  ).join(' ');
-
-  const path2026Points = SALES_2026
-    .map((v, i) => v !== null ? { x: xPos(i), y: PAD.top + yScale(v), i } : null)
-    .filter(Boolean);
-  const path2026 = path2026Points.map((p, idx) =>
-    `${idx === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`
-  ).join(' ');
-
-  const fmt = (v) => v >= 1000000
-    ? `S/ ${(v/1000000).toFixed(1)}M`
-    : `S/ ${(v/1000).toFixed(0)}K`;
-
-  return (
-    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
-      <ProgressHeader step={4} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
-      <div className="card card-wide animate-in">
-
-        <div className="row" style={{marginBottom:'1.5rem',justifyContent:'space-between'}}>
-          <div>
-            <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 3 · Interpretación de Datos</div>
-            <h2>Análisis de Ventas – Vertical Promos</h2>
-            <p className="subtitle">Lee el gráfico y demuestra criterio de producto para diagnosticar el negocio y decidir qué investigar después.</p>
-          </div>
-          <div className="score-circle">
-            <div className="score-num">3/3</div>
-            <div className="score-lbl">módulo</div>
-          </div>
-        </div>
-
-        {/* Context */}
-        <div style={{background:'rgba(124,58,237,.07)',border:'1px solid var(--border)',borderRadius:12,padding:'1.1rem 1.3rem',marginBottom:'1.25rem',fontSize:'.88rem',lineHeight:1.65,color:'var(--muted)'}}>
-          <strong style={{color:'var(--text)'}}>Contexto:</strong> El siguiente gráfico muestra el GMV mensual de la vertical <span style={{color:'var(--accent)',fontWeight:600}}>Promos</span> en Yape.
-          Se presentan los <span style={{color:'#C4B5FD',fontWeight:600}}>12 meses de 2025</span> y el avance de <span style={{color:'#67E8F9',fontWeight:600}}>enero a mayo 2026</span>.
-          Los valores están en soles (S/).
-        </div>
-
-        {/* KPI summary row */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'.65rem',marginBottom:'1.25rem'}}>
-          {(() => {
-            const may25 = SALES_2025[4];
-            const may26 = SALES_2026[4];
-            const yoy   = ((may26 - may25) / may25 * 100).toFixed(1);
-            const ytd25 = SALES_2025.slice(0,5).reduce((a,b)=>a+b,0);
-            const ytd26 = SALES_2026.slice(0,5).reduce((a,b)=>a+b,0);
-            const yoyYtd = ((ytd26-ytd25)/ytd25*100).toFixed(1);
-            const mom    = ((may26 - SALES_2026[3]) / SALES_2026[3] * 100).toFixed(1);
-            const items  = [
-              { label:'GMV Mayo 2026', val: fmt(may26), sub: 'Mes actual' },
-              { label:'YoY Mayo',      val: '+'+yoy+'%', sub: 'vs Mayo 2025', color:'var(--green)' },
-              { label:'YTD 2026',      val: fmt(ytd26),  sub: 'Ene–May acumulado' },
-              { label:'MoM Mayo',      val: (mom>0?'+':'')+mom+'%', sub: 'vs Abril 2026', color: mom>=0?'var(--green)':'var(--red)' },
-            ];
-            return items.map(({label,val,sub,color}) => (
-              <div key={label} style={{background:'rgba(28,16,64,.7)',border:'1px solid var(--border)',borderRadius:10,padding:'.7rem .8rem'}}>
-                <div style={{fontSize:'.72rem',color:'var(--muted)',marginBottom:'.2rem',textTransform:'uppercase',letterSpacing:'.05em'}}>{label}</div>
-                <div style={{fontSize:'1.05rem',fontWeight:800,fontFamily:'var(--mono)',color:color||'var(--text)'}}>{val}</div>
-                <div style={{fontSize:'.7rem',color:'var(--dim)',marginTop:'.15rem'}}>{sub}</div>
-              </div>
-            ));
-          })()}
-        </div>
-
-        {/* SVG Chart */}
-        <div style={{background:'#0A0520',border:'1px solid var(--border)',borderRadius:14,padding:'1rem 0 .5rem',marginBottom:'1.25rem',overflowX:'auto'}}>
-          <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',maxWidth:W,display:'block',margin:'0 auto',fontFamily:'Space Mono, monospace'}}
-            onMouseLeave={() => setTooltip(null)}>
-
-            {/* Grid lines */}
-            {yTicks.map(t => (
-              <g key={t}>
-                <line
-                  x1={PAD.left} y1={PAD.top + yScale(t)}
-                  x2={W - PAD.right} y2={PAD.top + yScale(t)}
-                  stroke="rgba(167,139,250,0.1)" strokeWidth="1" strokeDasharray="4,4"
-                />
-                <text x={PAD.left - 6} y={PAD.top + yScale(t) + 4}
-                  textAnchor="end" fill="#6B5F8A" fontSize="9.5">
-                  {fmt(t)}
-                </text>
-              </g>
-            ))}
-
-            {/* Month labels */}
-            {MONTHS_LABELS.map((m, i) => (
-              <text key={m} x={xPos(i)} y={H - PAD.bottom + 16}
-                textAnchor="middle" fill="#6B5F8A" fontSize="9.5">{m}</text>
-            ))}
-
-            {/* 2025 area fill */}
-            <defs>
-              <linearGradient id="grad25" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#A78BFA" stopOpacity="0.18"/>
-                <stop offset="100%" stopColor="#A78BFA" stopOpacity="0.01"/>
-              </linearGradient>
-              <linearGradient id="grad26" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#67E8F9" stopOpacity="0.22"/>
-                <stop offset="100%" stopColor="#67E8F9" stopOpacity="0.01"/>
-              </linearGradient>
-            </defs>
-
-            {/* 2025 fill */}
-            <path
-              d={path2025 + ` L${xPos(11).toFixed(1)},${(PAD.top+chartH).toFixed(1)} L${PAD.left},${(PAD.top+chartH).toFixed(1)} Z`}
-              fill="url(#grad25)"
-            />
-            {/* 2026 fill */}
-            {path2026Points.length > 1 && (
-              <path
-                d={path2026 + ` L${path2026Points[path2026Points.length-1].x.toFixed(1)},${(PAD.top+chartH).toFixed(1)} L${path2026Points[0].x.toFixed(1)},${(PAD.top+chartH).toFixed(1)} Z`}
-                fill="url(#grad26)"
-              />
-            )}
-
-            {/* 2025 line */}
-            <path d={path2025} fill="none" stroke="#A78BFA" strokeWidth="2" strokeLinejoin="round"/>
-
-            {/* 2026 line */}
-            <path d={path2026} fill="none" stroke="#67E8F9" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="6,0"/>
-
-            {/* Dots 2025 */}
-            {SALES_2025.map((v, i) => (
-              <circle key={'d25'+i}
-                cx={xPos(i)} cy={PAD.top + yScale(v)} r="4"
-                fill="#0A0520" stroke="#A78BFA" strokeWidth="2"
-                style={{cursor:'pointer'}}
-                onMouseEnter={() => setTooltip({ x: xPos(i), y: PAD.top+yScale(v), label: MONTHS_LABELS[i]+' 2025', val: fmt(v), color:'#A78BFA' })}
-              />
-            ))}
-
-            {/* Dots 2026 */}
-            {path2026Points.map(({x, y, i}) => (
-              <circle key={'d26'+i}
-                cx={x} cy={y} r="5"
-                fill="#0A0520" stroke="#67E8F9" strokeWidth="2.5"
-                style={{cursor:'pointer'}}
-                onMouseEnter={() => setTooltip({ x, y, label: MONTHS_LABELS[i]+' 2026', val: fmt(SALES_2026[i]), color:'#67E8F9',
-                  yoy: '+'+((SALES_2026[i]-SALES_2025[i])/SALES_2025[i]*100).toFixed(1)+'%' })}
-              />
-            ))}
-
-            {/* May 2026 marker */}
-            <line
-              x1={xPos(4)} y1={PAD.top}
-              x2={xPos(4)} y2={PAD.top+chartH}
-              stroke="rgba(103,232,249,0.25)" strokeWidth="1" strokeDasharray="3,3"
-            />
-            <text x={xPos(4)} y={PAD.top - 6} textAnchor="middle" fill="#67E8F9" fontSize="9" fontWeight="700">
-              Corte May 2026
-            </text>
-
-            {/* Tooltip */}
-            {tooltip && (() => {
-              const tx = Math.min(tooltip.x + 10, W - 120);
-              const ty = Math.max(tooltip.y - 50, PAD.top);
-              return (
-                <g>
-                  <rect x={tx} y={ty} width="110" height={tooltip.yoy ? 46 : 34} rx="6"
-                    fill="#1A0B35" stroke={tooltip.color} strokeWidth="1"/>
-                  <text x={tx+8} y={ty+14} fill={tooltip.color} fontSize="9.5" fontWeight="700">{tooltip.label}</text>
-                  <text x={tx+8} y={ty+27} fill="#EDE9FE" fontSize="10" fontWeight="700">{tooltip.val}</text>
-                  {tooltip.yoy && (
-                    <text x={tx+8} y={ty+40} fill="#34D399" fontSize="9">YoY {tooltip.yoy}</text>
-                  )}
-                </g>
-              );
-            })()}
-          </svg>
-
-          {/* Legend */}
-          <div style={{display:'flex',gap:'1.5rem',justifyContent:'center',paddingBottom:'.5rem',fontSize:'.78rem'}}>
-            <span style={{display:'flex',alignItems:'center',gap:'.4rem',color:'#A78BFA'}}>
-              <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#A78BFA" strokeWidth="2"/></svg>
-              GMV 2025
-            </span>
-            <span style={{display:'flex',alignItems:'center',gap:'.4rem',color:'#67E8F9'}}>
-              <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#67E8F9" strokeWidth="2.5"/></svg>
-              GMV 2026 (Ene–May)
-            </span>
-          </div>
-        </div>
-
-        {/* Question */}
-        <div style={{background:'rgba(103,232,249,.05)',border:'1px solid rgba(103,232,249,.2)',borderRadius:12,padding:'1.1rem 1.25rem',marginBottom:'1.25rem'}}>
-          <div style={{fontWeight:700,color:'var(--cyan)',marginBottom:'.6rem',fontSize:'.88rem',textTransform:'uppercase',letterSpacing:'.04em'}}>🧠 Pregunta</div>
-          <p style={{fontSize:'.92rem',lineHeight:1.65}}>
-            Observas el desempeño de Promos entre 2025 y 2026. ¿Qué diagnóstico de producto harías? Separa hechos de hipótesis, identifica qué puede explicar el crecimiento y define las preguntas y cortes de datos que priorizarías antes de decidir si intervenir, escalar o mantener la estrategia.
-          </p>
-        </div>
-
-        {/* Text area */}
-        <div style={{marginBottom:'1rem'}}>
-          <div className="label">✍️ Tu análisis</div>
-          <textarea
-            className="prose-area"
-            value={answer}
-            onChange={e => setAnswer(e.target.value)}
-            placeholder="Interpreta tendencias y estacionalidad, separa señal de ruido y plantea hipótesis causales. Define qué métricas, segmentos o funnels analizarías después y qué decisión de producto podría cambiar según los resultados..."
-            style={{minHeight:180}}
-          />
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'.4rem'}}>
-            <div style={{flex:1,marginRight:'1rem'}}>
-              <div style={{height:3,background:'rgba(167,139,250,.1)',borderRadius:100,overflow:'hidden'}}>
-                <div style={{height:'100%',width:`${progress}%`,background:isReady?'var(--green)':'var(--accent)',borderRadius:100,transition:'width .3s,background .3s'}}/>
-              </div>
-            </div>
-            <div className="char-count">{answer.trim().length}/{minChars} chars mínimo</div>
-          </div>
-        </div>
-
-        <div style={{display:'flex',gap:'1rem',alignItems:'center',flexWrap:'wrap'}}>
-          <button
-            className={`btn ${isReady ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={handleSave}
-            disabled={!isReady}
-            style={{opacity: isReady ? 1 : .5}}
-          >
-            💾 Guardar Análisis
-          </button>
-          {savedData?.answer && (
-            <button className="btn btn-green" onClick={() => onComplete({answer})}>
-              Finalizar Challenge →
-            </button>
-          )}
-          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Análisis guardado</span>
-        </div>
-      </div>
-    </div>
-  );
+function renderData(){
+ const a=state.answers.data||{};
+ app.innerHTML=layout(`<span class="badge">5 · La trampa de los datos</span><h2>¿Qué decisión permite realmente la evidencia?</h2><p class="subtitle">Marketing dice: <b>“¡Funcionó! +4pp de compra recurrente de Promos. Deberíamos lanzarlo.”</b> Tú recibes la evidencia completa.</p><div class="section box"><table class="table"><thead><tr><th>Métrica</th><th>Control</th><th>Variante</th></tr></thead><tbody><tr><td>Compra recurrente de Promos</td><td>32%</td><td><b>36%</b></td></tr><tr><td>Éxito de compra</td><td>96.5%</td><td>96.4%</td></tr><tr><td>Contactos CX sobre promos / compras</td><td>2.4%</td><td>2.5%</td></tr></tbody></table><p class="small" style="margin-top:12px">Muestra total: 2,000 usuarios. La diferencia observada en compra recurrente <b>no es estadísticamente significativa</b>.</p></div><div class="section box"><table class="table"><thead><tr><th>Segmento</th><th>Control</th><th>Variante</th></tr></thead><tbody><tr><td>Heavy users de Promos</td><td>55%</td><td>64%</td></tr><tr><td>Casual users</td><td>18%</td><td>18.5%</td></tr></tbody></table></div><div class="section grid grid2"><div><label>Conclusión · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: qué sí puedes afirmar con los datos observados, sin confundir correlación con causalidad.</div><textarea id="d5" data-min="200" placeholder="Describe tu lectura de los resultados y el grado de certeza.">${esc(a.concl)}</textarea></div><div><label>Lectura por segmento · mínimo 150 caracteres <span class="required">*</span></label><div class="small">Expectativa: cómo cambia o no cambia tu interpretación al separar Heavy y Casual users de Promos.</div><textarea id="d7" data-min="150" placeholder="Qué observas y qué incertidumbre permanece.">${esc(a.seg)}</textarea></div></div><div class="section"><label>Siguiente acción · mínimo 200 caracteres <span class="required">*</span></label><div class="small">Expectativa: una decisión concreta sobre el experimento y qué aprendizaje buscarías a continuación.</div><textarea id="d9" data-min="200" placeholder="Qué harías ahora, con qué alcance y con qué evidencia esperas decidir.">${esc(a.next)}</textarea></div><div class="btns">${btnBack()}${btnNext()}</div>`);
+ document.getElementById('backBtn').onclick=()=>setStep(4);document.getElementById('nextBtn').onclick=()=>{if(!requireText('d5')||!requireText('d7',150)||!requireText('d9')){alert('Completa todas las respuestas abiertas con los mínimos indicados.');return}state.answers.data={concl:document.getElementById('d5').value,seg:document.getElementById('d7').value,next:document.getElementById('d9').value};setStep(6)};
 }
 
 
-// ── BACKLOG DATA ───────────────────────────────────────────────────────────
-const PM_BACKLOG = [
-  { id:'A', title:'Simplificar pantalla de selección de promo',   desc:'De 12 campos a 4',                          reason:'Fricción alta en el flujo de compra',              type:'UX',            pts:8,  impact:'Sube conversión' },
-  { id:'B', title:'Notificación push a usuarios que abandonaron', desc:'Vieron una promo pero no compraron',         reason:'Abandono sin compra — GMV recuperable',            type:'GMV',           pts:4,  impact:'Recupera GMV perdido' },
-  { id:'C', title:'Sección "Promos del día" en el home de Yape',  desc:'Mayor visibilidad y descubrimiento',         reason:'Bajo descubrimiento de promos en el home',         type:'GMV',           pts:14, impact:'Sube volumen de compras' },
-  { id:'D', title:'Integración cashback de Yape en Promos',       desc:'Aplicar saldo cashback al comprar promos',   reason:'Falta de incentivo de compra recurrente',          type:'GMV',           pts:22, impact:'Muy alto — pero incierto' },
-  { id:'E', title:'Corregir bug de transacciones fallidas',       desc:'15% de transacciones fallan silenciosamente',reason:'Pérdida activa de GMV — S/ 14K/mes estimados',     type:'Deuda técnica', pts:6,  impact:'Detiene pérdida real de GMV' },
-  { id:'F', title:'Rediseño módulo de pagos de Promos',           desc:'Eliminar deuda técnica acumulada de 3 años', reason:'Riesgo técnico que bloquea velocidad futura',      type:'Deuda técnica', pts:16, impact:'Ninguno directo en Q4' },
-];
 
-const TYPE_COLORS = {
-  'UX':            { bg:'rgba(167,139,250,.15)', border:'rgba(167,139,250,.4)',  text:'#C4B5FD' },
-  'GMV':           { bg:'rgba(52,211,153,.1)',   border:'rgba(52,211,153,.35)', text:'#6EE7B7' },
-  'Deuda técnica': { bg:'rgba(251,191,36,.1)',   border:'rgba(251,191,36,.35)', text:'#FCD34D' },
-};
-
-// ── PM SCREEN ──────────────────────────────────────────────────────────────
-function PMScreen({ candidate, onComplete, savedData }) {
-  const SPRINTS   = [1, 2, 3, 4, 5, 6];
-  const CAPACITY  = 10;
-  const TOTAL_CAP = 60;
-
-  // assignment: { itemId -> sprintNum | 'out' }
-  const initAssign = () => {
-    const a = {};
-    PM_BACKLOG.forEach(i => { a[i.id] = 'out'; });
-    return a;
-  };
-  const [assignment, setAssignment] = useState(savedData?.assignment || initAssign());
-  const [justify, setJustify]       = useState(savedData?.justify || '');
-  const [dragging, setDragging]     = useState(null);
-  const [saved, setSaved]           = useState(false);
-
-  const MIN_JUSTIFY = 120;
-  const isReady = justify.trim().length >= MIN_JUSTIFY && PM_BACKLOG.some(i => assignment[i.id] !== 'out');
-  const progress = Math.min(100, (justify.trim().length / MIN_JUSTIFY) * 100);
-
-  const totalSP = TOTAL_CAP;
-  const usedSP  = PM_BACKLOG.reduce((s, i) => s + i.pts, 0);
-
-  const sprintSP = (sp) =>
-    PM_BACKLOG.filter(i => assignment[i.id] === sp).reduce((s, i) => s + i.pts, 0);
-
-  const assignedSP = PM_BACKLOG.filter(i => assignment[i.id] !== 'out').reduce((s, i) => s + i.pts, 0);
-
-  const assign = (itemId, sprint) => {
-    setAssignment(prev => ({ ...prev, [itemId]: sprint }));
-  };
-
-  const handleDragStart = (e, itemId) => {
-    setDragging(itemId);
-    e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleDrop = (e, target) => {
-    e.preventDefault();
-    if (dragging) { assign(dragging, target); setDragging(null); }
-  };
-
-  const handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-
-  const handleFinish = () => {
-    if (!isReady) return;
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-    const summary = PM_BACKLOG.map(i => {
-      const sp = assignment[i.id];
-      return i.id + ' (' + i.title + '): ' + (sp === 'out' ? 'Fuera del quarter' : 'Sprint ' + sp);
-    }).join('\n');
-    onComplete({ assignment, justify, summary: summary + '\n\nJustificación:\n' + justify });
-  };
-
-  const tc = (type) => TYPE_COLORS[type];
-
-  return (
-    <div className="screen" style={{justifyContent:'flex-start', paddingTop:'2rem'}}>
-      <ProgressHeader step={5} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
-      <div className="card card-wide animate-in">
-
-        {/* Header */}
-        <div style={{marginBottom:'1.25rem'}}>
-          <div className="badge" style={{marginBottom:'.5rem'}}>Módulo 4 · Product Management</div>
-          <h2 style={{marginBottom:'.3rem'}}>Priorización, trade-offs y alineación con stakeholders</h2>
-          <p className="subtitle">Construye una secuencia de ejecución para el quarter: asigna cada iniciativa al sprint donde debería ejecutarse o déjala fuera. Luego explica los trade-offs, riesgos y supuestos detrás de tu decisión.</p>
-        </div>
-
-        {/* Context */}
-        <div style={{background:'rgba(124,58,237,.07)', border:'1px solid var(--border)', borderRadius:12, padding:'1rem 1.2rem', marginBottom:'1.1rem', fontSize:'.87rem', lineHeight:1.7, color:'var(--muted)'}}>
-          <strong style={{color:'var(--text)'}}>Contexto:</strong> Eres el Senior Product Manager de la vertical <span style={{color:'var(--accent)', fontWeight:700}}>Promos</span> en Yape. Estás en el <strong style={{color:'var(--text)'}}>último mes de Q3</strong> cerrando la priorización de Q4. El objetivo es <span style={{color:'var(--green)', fontWeight:700}}>S/ 500K de GMV</span>. El promedio mensual actual es <strong style={{color:'var(--text)'}}>S/ 95K</strong> — proyecta S/ 285K sin cambios. Q4 tiene <strong style={{color:'var(--text)'}}>6 sprints × 10 puntos = 60 puntos disponibles</strong>. Los puntos de historia son la estimación de esfuerzo del equipo de tecnología.
-          <div style={{marginTop:'.75rem', padding:'.6rem .85rem', background:'rgba(248,113,113,.07)', border:'1px solid rgba(248,113,113,.2)', borderRadius:8, color:'#FCA5A5', fontSize:'.82rem'}}>
-            ⚠️ En la sesión de planning, el Head Comercial dice: <em>"La integración con cashback es la prioridad número uno — va a disparar el GMV. Y la sección de Promos del día tiene que estar desde el inicio del quarter, marketing ya tiene una campaña preparada."</em>
-          </div>
-        </div>
-
-        {/* Capacity bar */}
-        <div style={{display:'flex', alignItems:'center', gap:'1rem', marginBottom:'1.1rem', padding:'.7rem 1rem', background:'rgba(28,16,64,.6)', border:'1px solid var(--border)', borderRadius:10}}>
-          <div style={{flex:1}}>
-            <div style={{display:'flex', justifyContent:'space-between', marginBottom:'.3rem'}}>
-              <span style={{fontSize:'.78rem', color:'var(--muted)'}}>Puntos asignados al quarter</span>
-              <span style={{fontFamily:'var(--mono)', fontWeight:700, fontSize:'.85rem', color: assignedSP > totalSP ? 'var(--red)' : assignedSP > 48 ? 'var(--amber)' : 'var(--green)'}}>
-                {assignedSP} / {totalSP} SP
-              </span>
-            </div>
-            <div style={{height:6, background:'rgba(167,139,250,.1)', borderRadius:100, overflow:'hidden'}}>
-              <div style={{height:'100%', width: Math.min(100, assignedSP/totalSP*100)+'%',
-                background: assignedSP > totalSP ? 'var(--red)' : assignedSP > 48 ? 'var(--amber)' : 'var(--green)',
-                borderRadius:100, transition:'width .3s, background .3s'}}/>
-            </div>
-          </div>
-          {assignedSP > totalSP && (
-            <span style={{fontSize:'.78rem', color:'var(--red)', fontWeight:700, whiteSpace:'nowrap'}}>⚠️ +{assignedSP - totalSP} SP sobre capacidad</span>
-          )}
-        </div>
-
-        {/* Drag-and-drop board */}
-        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'.75rem', marginBottom:'1rem'}}>
-
-          {/* Unassigned pool */}
-          <div
-            style={{gridColumn:'1/-1', background:'rgba(28,16,64,.5)', border: dragging ? '2px dashed var(--accent)' : '1px solid var(--border)', borderRadius:12, padding:'.75rem', minHeight:80}}
-            onDrop={(e) => handleDrop(e, 'out')}
-            onDragOver={handleDragOver}
-          >
-            <div style={{fontSize:'.72rem', fontWeight:700, color:'var(--dim)', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:'.6rem'}}>
-              📦 Backlog — fuera del quarter ({PM_BACKLOG.filter(i => assignment[i.id] === 'out').length} iniciativas, {PM_BACKLOG.filter(i => assignment[i.id] === 'out').reduce((s,i) => s+i.pts, 0)} SP)
-            </div>
-            <div style={{display:'flex', flexWrap:'wrap', gap:'.5rem', minHeight:40}}>
-              {PM_BACKLOG.filter(i => assignment[i.id] === 'out').map(item => {
-                const c = tc(item.type);
-                return (
-                  <div
-                    key={item.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, item.id)}
-                    style={{
-                      background: c.bg, border: '1px solid ' + c.border, borderRadius:8,
-                      padding:'.5rem .75rem', cursor:'grab', userSelect:'none',
-                      opacity: dragging === item.id ? .5 : 1, transition:'opacity .15s',
-                      display:'flex', flexDirection:'column', gap:'.25rem', minWidth:200, maxWidth:260
-                    }}
-                  >
-                    <div style={{display:'flex', alignItems:'center', gap:'.5rem'}}>
-                      <span style={{fontFamily:'var(--mono)', fontWeight:800, color:c.text, fontSize:'.82rem'}}>{item.id}</span>
-                      <span style={{color:'var(--text)', fontSize:'.8rem', fontWeight:600, flex:1}}>{item.title}</span>
-                      <span style={{fontFamily:'var(--mono)', fontSize:'.75rem', color: item.pts > 10 ? 'var(--red)' : 'var(--amber)', fontWeight:700, whiteSpace:'nowrap'}}>{item.pts}SP</span>
-                    </div>
-                    <div style={{display:'flex', flexDirection:'column', gap:'.1rem', paddingLeft:'.1rem'}}>
-                      <span style={{fontSize:'.7rem', color:'var(--dim)'}}>📌 {item.reason}</span>
-                      <span style={{fontSize:'.7rem', color:c.text, opacity:.85}}>↗ {item.impact}</span>
-                    </div>
-                  </div>
-                );
-              })}
-              {PM_BACKLOG.filter(i => assignment[i.id] === 'out').length === 0 && (
-                <div style={{color:'var(--dim)', fontSize:'.8rem', fontStyle:'italic'}}>Todas las iniciativas están asignadas</div>
-              )}
-            </div>
-          </div>
-
-          {/* Sprint lanes */}
-          {SPRINTS.map(sp => {
-            const spSP   = sprintSP(sp);
-            const over   = spSP > CAPACITY;
-            const items  = PM_BACKLOG.filter(i => assignment[i.id] === sp);
-            return (
-              <div
-                key={sp}
-                onDrop={(e) => handleDrop(e, sp)}
-                onDragOver={handleDragOver}
-                style={{
-                  background: over ? 'rgba(248,113,113,.06)' : 'rgba(28,16,64,.4)',
-                  border: dragging ? '2px dashed ' + (over ? 'var(--red)' : 'var(--accent)') : '1px solid ' + (over ? 'rgba(248,113,113,.4)' : 'var(--border)'),
-                  borderRadius:12, padding:'.75rem', minHeight:90,
-                  transition:'border .15s, background .15s'
-                }}
-              >
-                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.5rem'}}>
-                  <span style={{fontSize:'.78rem', fontWeight:700, color:'var(--neon)'}}>Sprint {sp}</span>
-                  <span style={{fontFamily:'var(--mono)', fontSize:'.75rem', fontWeight:700,
-                    color: over ? 'var(--red)' : spSP > 0 ? 'var(--amber)' : 'var(--dim)'}}>
-                    {spSP}/{CAPACITY} SP {over ? '⚠️' : ''}
-                  </span>
-                </div>
-                <div style={{display:'flex', flexDirection:'column', gap:'.4rem', minHeight:40}}>
-                  {items.map(item => {
-                    const c = tc(item.type);
-                    return (
-                      <div
-                        key={item.id}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, item.id)}
-                        style={{
-                          background:c.bg, border:'1px solid '+c.border, borderRadius:7,
-                          padding:'.45rem .6rem', cursor:'grab', userSelect:'none',
-                          opacity: dragging === item.id ? .5 : 1,
-                          display:'flex', flexDirection:'column', gap:'.2rem'
-                        }}
-                      >
-                        <div style={{display:'flex', alignItems:'center', gap:'.4rem'}}>
-                          <span style={{fontFamily:'var(--mono)', fontWeight:800, color:c.text, fontSize:'.78rem'}}>{item.id}</span>
-                          <span style={{color:'var(--text)', fontSize:'.76rem', flex:1, fontWeight:600}}>{item.title}</span>
-                          <span style={{fontFamily:'var(--mono)', fontSize:'.7rem', color: item.pts > 10 ? 'var(--red)' : 'var(--amber)', fontWeight:700}}>{item.pts}SP</span>
-                        </div>
-                        <div style={{display:'flex', flexDirection:'column', gap:'.08rem', paddingLeft:'.1rem'}}>
-                          <span style={{fontSize:'.67rem', color:'var(--dim)'}}>📌 {item.reason}</span>
-                          <span style={{fontSize:'.67rem', color:c.text, opacity:.8}}>↗ {item.impact}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {items.length === 0 && (
-                    <div style={{color:'var(--dim)', fontSize:'.74rem', fontStyle:'italic', textAlign:'center', paddingTop:'.5rem'}}>Arrastra aquí</div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Justification */}
-        <div style={{marginBottom:'1rem'}}>
-          <div style={{background:'rgba(103,232,249,.05)', border:'1px solid rgba(103,232,249,.2)', borderRadius:10, padding:'.85rem 1rem', marginBottom:'.75rem', fontSize:'.88rem', lineHeight:1.65, color:'var(--text)'}}>
-            <span style={{color:'var(--cyan)', fontWeight:700}}>🧠 Justifica tu decisión:</span> ¿Por qué ese orden? ¿Qué outcome priorizas y qué trade-offs aceptas? ¿Qué iniciativas dejaste fuera y por qué? ¿Cómo manejarías D (cashback) frente a la presión del Head Comercial y qué evidencia pedirías antes de comprometer capacidad?
-          </div>
-          <div className="label" style={{marginBottom:'.5rem'}}>✍️ Tu justificación</div>
-          <textarea
-            className="prose-area"
-            value={justify}
-            onChange={e => setJustify(e.target.value)}
-            placeholder="Explica el criterio de producto detrás de tu priorización, los trade-offs, riesgos, dependencias y cómo alinearías a los stakeholders..."
-            style={{minHeight:150}}
-          />
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'.4rem', marginBottom:'1rem'}}>
-            <div style={{flex:1, marginRight:'1rem'}}>
-              <div style={{height:3, background:'rgba(167,139,250,.1)', borderRadius:100, overflow:'hidden'}}>
-                <div style={{height:'100%', width:progress+'%', background:justify.trim().length>=MIN_JUSTIFY?'var(--green)':'var(--accent)', borderRadius:100, transition:'width .3s,background .3s'}}/>
-              </div>
-            </div>
-            <div className="char-count">{justify.trim().length}/{MIN_JUSTIFY} chars mínimo</div>
-          </div>
-        </div>
-
-        <div style={{display:'flex', gap:'1rem', alignItems:'center', flexWrap:'wrap'}}>
-          <button
-            className={`btn ${isReady ? 'btn-green' : 'btn-ghost'}`}
-            onClick={handleFinish}
-            disabled={!isReady}
-            style={{opacity: isReady ? 1 : .5}}
-          >
-            ✅ Finalizar Challenge
-          </button>
-          {!isReady && !PM_BACKLOG.some(i => assignment[i.id] !== 'out') && (
-            <span style={{color:'var(--dim)', fontSize:'.82rem'}}>Asigna al menos una iniciativa a un sprint</span>
-          )}
-          <span className={`saved-indicator ${saved ? 'show' : ''}`}>✓ Guardado</span>
-        </div>
-
-      </div>
-    </div>
-  );
-}
-
-// ── SCREEN 4: Candidate Completion ────────────────────────────────────────
-function CompletionScreen({ candidate, email, sqlData, bizData, chartData, pmData, onAdminAccess }) {
-  const [downloaded, setDownloaded] = useState(false);
-  const now = new Date().toLocaleDateString('es-PE', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
-
-  const handleDownload = () => {
-    const sep = '═'.repeat(50);
-    const div = '─'.repeat(50);
-
-    const lines = [
-      sep,
-      '  YAPE · REPORTE DE CHALLENGE',
-      '  Senior Product Manager – GPM Commerce',
-      sep,
-      '',
-      'Candidato : ' + candidate,
-      'Email     : ' + (email || 'No proporcionado'),
-      'Fecha     : ' + now,
-      '',
-      div,
-      'MÓDULO 1 · NORTH STAR METRIC',
-      div,
-      (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${q.question}\nRespuesta: ${String.fromCharCode(65 + sqlData.answers[q.id])}`).join('\n\n') : 'Sin respuesta'),
-      '',
-      div,
-      'MÓDULO 2 · CASO DE PRICING (Cuotas)',
-      div,
-      (bizData?.answer || 'Sin respuesta'),
-      '',
-      div,
-      'MÓDULO 3 · ANÁLISIS DE VENTAS PROMOS',
-      div,
-      (chartData?.answer || 'Sin respuesta'),
-      '',
-      sep,
-      'Documento generado el ' + now,
-      'Yape · GPM Commerce · Challenge Platform',
-      sep,
-    ];
-
-    const text = lines.join('\n');
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = 'Reporte_Challenge_' + candidate.replace(/\s+/g, '_') + '.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-    setDownloaded(true);
-  };
-
-  const handlePrint = () => {
-    const sep = '═'.repeat(50);
-    const div = '─'.repeat(50);
-    const lines = [
-      sep,
-      '  YAPE · REPORTE DE CHALLENGE',
-      '  Senior Product Manager – GPM Commerce',
-      sep,
-      '',
-      'Candidato : ' + candidate,
-      'Fecha     : ' + now,
-      '',
-      div,
-      'MÓDULO 1 · NORTH STAR METRIC',
-      div,
-      (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${q.question}\nRespuesta: ${String.fromCharCode(65 + sqlData.answers[q.id])}`).join('\n\n') : 'Sin respuesta'),
-      '',
-      div,
-      'MÓDULO 2 · CASO DE PRICING',
-      div,
-      (bizData?.answer || 'Sin respuesta'),
-      '',
-      div,
-      'MÓDULO 3 · ANÁLISIS DE VENTAS',
-      div,
-      (chartData?.answer || 'Sin respuesta'),
-      '',
-      div,
-      'MÓDULO 4 · PM – PRIORIZACIÓN Q4',
-      div,
-      (pmData?.summary || 'Sin respuesta'),
-      '',
-      sep,
-    ];
-    const text = lines.join('\n');
-    const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const w = window.open('', '_blank');
-    w.document.write(
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"/>' +
-      '<title>Reporte Challenge – ' + candidate + '</title>' +
-      '<style>' +
-        'body{font-family:"Courier New",monospace;padding:2.5rem;font-size:13px;line-height:1.75;color:#1a1a2e;background:#fff}' +
-        'pre{white-space:pre-wrap;word-break:break-word}' +
-        '@page{margin:2cm}' +
-        '@media print{body{padding:0}}' +
-      '</style></head>' +
-      '<body><pre>' + escaped + '</pre>' +
-      '</body></html>'
-    );
-    w.document.close();
-    w.focus();
-    setTimeout(() => w.print(), 400);
-  };
-
-  return (
-    <div className="screen">
-      <div className="card animate-in" style={{maxWidth:560,textAlign:'center'}}>
-        <div style={{fontSize:'3rem',marginBottom:'1rem'}}>✅</div>
-        <div className="badge badge-green" style={{marginBottom:'1rem'}}>Challenge Completado</div>
-        <h2 style={{marginBottom:'.6rem'}}>¡Gracias, {candidate}!</h2>
-        <p className="subtitle" style={{maxWidth:420,margin:'0 auto 2rem'}}>
-          Tu respuesta ha sido registrada correctamente. Descarga tu reporte y compártelo en la sesión.
-        </p>
-
-        <div style={{background:'rgba(124,58,237,.08)',border:'1px solid var(--border)',borderRadius:14,padding:'1.5rem',marginBottom:'1.5rem',textAlign:'left'}}>
-          <div style={{fontWeight:700,color:'var(--neon)',fontSize:'.82rem',textTransform:'uppercase',letterSpacing:'.07em',marginBottom:'1rem'}}>
-            📄 Tu reporte incluye
-          </div>
-          <div style={{display:'flex',flexDirection:'column',gap:'.6rem'}}>
-            {[
-              {icon:'🧭', label:'Módulo 1', desc:'Tus respuestas sobre North Star Metric'},
-              {icon:'📊', label:'Módulo 2', desc:'Tu análisis del caso de pricing con cuotas'},
-              {icon:'📈', label:'Módulo 3', desc:'Tu interpretación del gráfico de ventas Promos'},
-              {icon:'🎯', label:'Módulo 4', desc:'Tu asignación de iniciativas al backlog Q4 con justificación'},
-            ].map(({icon,label,desc}) => (
-              <div key={label} style={{display:'flex',alignItems:'center',gap:'.75rem',padding:'.5rem .75rem',background:'rgba(28,16,64,.5)',borderRadius:8}}>
-                <span style={{fontSize:'1.2rem'}}>{icon}</span>
-                <div>
-                  <span style={{fontWeight:700,fontSize:'.85rem',color:'var(--accent)'}}>{label}</span>
-                  <span style={{color:'var(--muted)',fontSize:'.82rem',marginLeft:'.5rem'}}>{desc}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{display:'flex',gap:'.75rem',justifyContent:'center',flexWrap:'wrap',marginBottom:'2rem'}}>
-          <button className="btn btn-primary" onClick={handleDownload} style={{gap:'.5rem'}}>
-            {downloaded ? '✓ Descargado' : '⬇️ Descargar .txt'}
-          </button>
-          <button className="btn btn-outline" onClick={handlePrint}>
-            🖨️ Imprimir / PDF
-          </button>
-        </div>
-
-        <div style={{display:'flex',justifyContent:'center'}}>
-          <button
-            onClick={onAdminAccess}
-            style={{background:'none',border:'none',cursor:'pointer',color:'var(--dim)',fontSize:'.72rem',fontFamily:'var(--mono)',opacity:.35,transition:'opacity .2s'}}
-            onMouseEnter={e=>e.target.style.opacity=1}
-            onMouseLeave={e=>e.target.style.opacity=.35}
-          >
-            admin
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── SCREEN 4b: Admin Report (PIN-gated) ────────────────────────────────────
-const ADMIN_PIN = '2025'; // ← cambia este PIN antes de publicar
-
-function ReportScreen({ candidate, email, sqlData, bizData, chartData, pmData }) {
-  const [pin, setPin] = useState('');
-  const [unlocked, setUnlocked] = useState(false);
-  const [pinError, setPinError] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const now = new Date().toLocaleDateString('es-PE', {day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
-
-  const handleUnlock = () => {
-    if (pin === ADMIN_PIN) { setUnlocked(true); setPinError(false); }
-    else { setPinError(true); setTimeout(()=>setPinError(false),1500); setPin(''); }
-  };
-
-  const sqlScore = typeof sqlData?.score === 'number' ? sqlData.score : 0;
-
-  const bizScore = (() => {
-    const a = (bizData?.answer||'').toLowerCase();
-    let pts = 0;
-    if (a.includes('valor presente') || a.includes('npv') || a.includes('vp') || a.includes('descuento')) pts += 25;
-    if (a.includes('costo de capital') || a.includes('tasa') || a.includes('wacc') || a.includes('cok')) pts += 20;
-    if (a.includes('kpi') || a.includes('métrica') || a.includes('metrica') || a.includes('churn') || a.includes('abandono')) pts += 20;
-    if (a.includes('recomiend') || a.includes('lanzar') || a.includes('iniciativa')) pts += 20;
-    if (a.trim().split(/\s+/).length > 80) pts += 15;
-    return Math.min(pts, 100);
-  })();
-
-  const chartScore = (() => {
-    const a = (chartData?.answer||'').toLowerCase();
-    let pts = 0;
-    if (a.includes('yoy') || a.includes('año') || a.includes('interanual') || a.includes('2025') || a.includes('2026')) pts += 25;
-    if (a.includes('estacionalidad') || a.includes('estacional') || a.includes('temporada') || a.includes('patron') || a.includes('patrón')) pts += 20;
-    if (a.includes('mom') || a.includes('mes a mes') || a.includes('mensual') || a.includes('variación')) pts += 20;
-    if (a.includes('pregunta') || a.includes('kpi') || a.includes('métrica') || a.includes('profundizar') || a.includes('contexto')) pts += 20;
-    if (a.trim().split(/\s+/).length > 80) pts += 15;
-    return Math.min(pts, 100);
-  })();
-
-  const pmScore = (() => {
-    const a1 = (pmData?.summary||'').toLowerCase();
-    const a2 = (pmData?.justify||'').toLowerCase();
-    const a  = a1 + ' ' + a2;
-    let pts = 0;
-    if (a1.includes('e') || a1.includes('bug') || a1.includes('falla') || a1.includes('transacc')) pts += 20;
-    if (a1.includes('sprint') || a1.includes('punto') || a1.includes('capacidad')) pts += 20;
-    if (a.includes('bug') || a.includes('deuda') || a.includes('sprint')) pts += 20;
-    if (a.includes('cashback') || a.includes('head') || a.includes('comercial')) pts += 20;
-    if (a.trim().split(/\s+/).length > 120) pts += 20;
-    return Math.min(pts, 100);
-  })();
-
-  const totalScore = Math.round((sqlScore + bizScore + chartScore + pmScore) / 4);
-  const level      = totalScore >= 80 ? 'Alto' : totalScore >= 55 ? 'Medio' : 'Básico';
-  const levelColor = totalScore >= 80 ? 'var(--green)' : totalScore >= 55 ? 'var(--amber)' : 'var(--red)';
-  const recommendation = totalScore >= 80
-    ? '✅ Recomendado para avanzar – Demuestra dominio técnico y criterio de negocio sólido.'
-    : totalScore >= 55
-    ? '🔄 Revisar en entrevista – Buena base, con brechas que pueden desarrollarse en el rol.'
-    : '⚠️ Requiere más evaluación – Se sugiere una sesión técnica adicional antes de avanzar.';
-
-  const queryText  = (sqlData?.answers ? NSM_QUESTIONS.map((q,i) => `${i+1}. ${String.fromCharCode(65 + sqlData.answers[q.id])} - ${q.options[sqlData.answers[q.id]]}`).join('\n') : 'Sin respuesta');
-  const answerText = (bizData?.answer || 'Sin respuesta');
-
-  const reportLines = [
-    '══════════════════════════════════════════════',
-    '  YAPE · REPORTE DE EVALUACIÓN',
-    '  Senior Product Manager – GPM Commerce',
-    '══════════════════════════════════════════════',
-    'Candidato   : ' + candidate,
-    'Email       : ' + (email || 'No proporcionado'),
-    'Fecha       : ' + now,
-    '',
-    '── RESULTADOS ──────────────────────────────',
-    'Score North Star       : ' + sqlScore  + '/100',
-    'Score Análisis Negocio : ' + bizScore  + '/100',
-    'Score Total            : ' + totalScore + '/100',
-    'Nivel de alineación    : ' + level,
-    '',
-    '── RECOMENDACIÓN ───────────────────────────',
-    recommendation,
-    '',
-    '── MÓDULO NORTH STAR METRIC ────────────────',
-    queryText.substring(0, 600) + (queryText.length > 600 ? '\n[...consulta truncada]' : ''),
-    '',
-    '── MÓDULO ANÁLISIS DE NEGOCIO ──────────────',
-    answerText.substring(0, 800) + (answerText.length > 800 ? '\n[...respuesta truncada]' : ''),
-    '',
-    '── MÓDULO GRÁFICO VENTAS PROMOS ────────────',
-    (chartData?.answer || 'Sin respuesta').substring(0, 800) + ((chartData?.answer||'').length > 800 ? '\n[...respuesta truncada]' : ''),
-    '',
-    '── MÓDULO 4 · PM – PRIORIZACIÓN Q4 ────────',
-    (pmData?.summary || 'Sin respuesta').substring(0, 800) + ((pmData?.summary||'').length > 800 ? '\n[...truncado]' : ''),
-    '',
-    '── FIRMA ────────────────────────────────────',
-    'Generado por Yape · GPM Commerce · Challenge Platform',
-    'Evaluación completada el ' + now,
-    '══════════════════════════════════════════════',
-  ];
-  const reportText = reportLines.join('\n');
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(reportText).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    });
-  };
-
-  const handlePrint = () => {
-    const printContent = reportText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const w = window.open('', '_blank');
-    w.document.write(
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Reporte \u2013 ' + candidate + '</title>' +
-      '<style>body{font-family:"Courier New",monospace;background:#09051A;color:#EDE9FE;padding:2rem;white-space:pre-wrap;font-size:13px;line-height:1.7}' +
-      '@media print{body{background:white;color:black}}</style></head><body>' +
-      printContent + '</body></html>'
-    );
-    w.document.close();
-    w.focus();
-    setTimeout(() => w.print(), 300);
-  };
-
-  if (!unlocked) {
-    return (
-      <div className="screen">
-        <div className="card animate-in" style={{maxWidth:420,textAlign:'center'}}>
-          <div style={{fontSize:'2.5rem',marginBottom:'1rem'}}>🔒</div>
-          <div className="badge" style={{marginBottom:'1rem'}}>Acceso Restringido</div>
-          <h2 style={{marginBottom:'.5rem'}}>Panel Admin</h2>
-          <p className="subtitle" style={{marginBottom:'1.5rem'}}>
-            Esta sección es exclusiva para el equipo de Talent. Ingresa el PIN de administrador.
-          </p>
-          <div style={{marginBottom:'1rem'}}>
-            <input
-              type="password"
-              placeholder="PIN de administrador"
-              value={pin}
-              onChange={e => setPin(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleUnlock()}
-              style={{textAlign:'center',letterSpacing:'.3em',fontSize:'1.2rem',
-                border: pinError ? '1px solid var(--red)' : '1px solid var(--border2)'}}
-            />
-            {pinError && (
-              <div style={{color:'var(--red)',fontSize:'.82rem',marginTop:'.4rem'}}>
-                PIN incorrecto. Inténtalo de nuevo.
-              </div>
-            )}
-          </div>
-          <button className="btn btn-primary" style={{width:'100%',justifyContent:'center'}} onClick={handleUnlock}>
-            Acceder al Reporte →
-          </button>
-          <div style={{marginTop:'1.5rem',color:'var(--dim)',fontSize:'.75rem'}}>
-            <span className="logo logo-sm">yape</span> · GPM Commerce · Uso interno
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="screen" style={{justifyContent:'flex-start',paddingTop:'2rem'}}>
-      <ProgressHeader step={6} total={6} steps={['Registro','NSM','Cuotas','Ventas','PM','Reporte']}/>
-      <div className="card card-wide animate-in">
-
-        <div style={{textAlign:'center',marginBottom:'2rem'}}>
-          <div style={{fontSize:'2.5rem',marginBottom:'.5rem'}}>📋</div>
-          <div className="badge" style={{marginBottom:'.75rem'}}>🔓 Vista Admin</div>
-          <h2>Reporte de Evaluación</h2>
-          <p className="subtitle">{candidate} · {now}</p>
-        </div>
-
-        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'1rem',marginBottom:'1.5rem'}}>
-          {[
-            {label:'North Star', score:sqlScore,   icon:'🧭'},
-            {label:'Pricing', score:bizScore,   icon:'📊'},
-            {label:'Ventas',  score:chartScore, icon:'📈'},
-            {label:'PM',      score:pmScore,    icon:'🎯'},
-            {label:'Total',   score:totalScore, icon:'⭐', highlight:true},
-          ].map(({label,score,icon,highlight}) => (
-            <div key={label} style={{
-              textAlign:'center',padding:'1.25rem .75rem',borderRadius:12,
-              background: highlight ? 'rgba(124,58,237,.15)' : 'rgba(28,16,64,.6)',
-              border: '1px solid ' + (highlight ? 'var(--accent)' : 'var(--border)'),
-            }}>
-              <div style={{fontSize:'1.4rem',marginBottom:'.3rem'}}>{icon}</div>
-              <div style={{fontSize:'2rem',fontWeight:800,fontFamily:'var(--mono)',lineHeight:1,
-                color: score>=80 ? 'var(--green)' : score>=55 ? 'var(--amber)' : 'var(--red)'
-              }}>{score}</div>
-              <div style={{color:'var(--muted)',fontSize:'.78rem',marginTop:'.25rem'}}>{label} / 100</div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{background:'rgba(28,16,64,.6)',border:'1px solid var(--border)',borderRadius:12,
-          padding:'1.25rem',marginBottom:'1.5rem',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:700,color:levelColor,fontSize:'1.1rem',marginBottom:'.25rem'}}>
-              Alineación: {level}
-            </div>
-            <div style={{color:'var(--text)',fontSize:'.9rem',lineHeight:1.5}}>{recommendation}</div>
-          </div>
-          <div style={{flexShrink:0,width:64,height:64,borderRadius:'50%',
-            display:'flex',alignItems:'center',justifyContent:'center',
-            background:'conic-gradient(' + levelColor + ' ' + totalScore + '%, rgba(167,139,250,.15) 0%)',
-            fontSize:'1.1rem',fontWeight:700,color:levelColor}}>
-            {totalScore}%
-          </div>
-        </div>
-
-        <div style={{marginBottom:'1.5rem'}}>
-          <div className="label" style={{marginBottom:'.6rem'}}>📄 Reporte completo</div>
-          <div className="report-block">{reportText}</div>
-        </div>
-
-        <div style={{display:'flex',gap:'.75rem',flexWrap:'wrap'}}>
-          <button className="btn btn-primary" onClick={handleCopy}>
-            {copied ? '✓ ¡Copiado!' : '📋 Copiar Reporte'}
-          </button>
-          <button className="btn btn-outline" onClick={handlePrint}>
-            🖨️ Descargar / Imprimir PDF
-          </button>
-        </div>
-
-      </div>
-      <div style={{marginTop:'2rem',textAlign:'center',color:'var(--dim)',fontSize:'.78rem'}}>
-        <span className="logo logo-sm">yape</span> · GPM Commerce · Challenge Platform · Confidencial interno
-      </div>
-    </div>
-  );
-}
-
-// ── MAIN APP ──────────────────────────────────────────────────────────────
-function App() {
-  const [step, setStep] = useState(1);
-  const [candidate, setCandidate] = useState('');
-  const [email, setEmail] = useState('');
-  const [sqlData, setSqlData] = useState(null);
-  const [bizData, setBizData] = useState(null);
-  const [chartData, setChartData] = useState(null);
-  const [pmData, setPmData] = useState(null);
-
-  const handleStart = (name, mail) => {
-    setCandidate(name);
-    setEmail(mail);
-    setStep(2);
-  };
-  const handleSQLComplete = (data) => {
-    setSqlData(data);
-  };
-  const handleSQLAdvance = (data) => {
-    setSqlData(data);
-    setStep(3);
-  };
-  const handleBizComplete = (data) => {
-    setBizData(data);
-  };
-  const handleBizAdvance = (data) => {
-    setBizData(data);
-    setStep(4);
-  };
-
-  // Wire onComplete to also advance when we have enough data
-  const sqlHandler = (data) => {
-    setSqlData(data);
-    // auto-show continue after save
-  };
-
-  return (
-    <div className="app-root">
-      {step === 1 && <WelcomeScreen onStart={handleStart}/>}
-      {step === 2 && (
-        <SQLScreen
-          candidate={candidate}
-          savedData={sqlData}
-          onComplete={(data) => {
-            setSqlData(data);
-            setStep(3);
-          }}
-        />
-      )}
-      {step === 3 && (
-        <BusinessScreen
-          candidate={candidate}
-          savedData={bizData}
-          onComplete={(data) => {
-            setBizData(data);
-            setStep(4);
-          }}
-        />
-      )}
-      {step === 4 && (
-        <ChartScreen
-          candidate={candidate}
-          savedData={chartData}
-          onComplete={(data) => {
-            setChartData(data);
-            setStep(5);
-          }}
-        />
-      )}
-      {step === 5 && (
-        <PMScreen
-          candidate={candidate}
-          savedData={pmData}
-          onComplete={(data) => {
-            setPmData(data);
-            setStep(6);
-          }}
-        />
-      )}
-      {step === 6 && <CompletionScreen candidate={candidate} email={email} sqlData={sqlData} bizData={bizData} chartData={chartData} pmData={pmData} onAdminAccess={()=>setStep(7)}/>}
-      {step === 7 && (
-        <ReportScreen
-          candidate={candidate}
-          email={email}
-          sqlData={sqlData}
-          bizData={bizData}
-          chartData={chartData}
-          pmData={pmData}
-        />
-      )}
-    </div>
-  );
+function renderAISpeech(){
+ const a=state.answers.ai||{};
+ app.innerHTML=layout(`<span class="badge">6 · AI Elevator Speech</span><h2>¿Qué cambia realmente con AI?</h2><p class="subtitle">No evaluamos conocimiento interno de Yape. Queremos observar si puedes conectar capacidad tecnológica, impacto probable en la industria, oportunidad/riesgo y criterio de producto.</p><div class="section box"><p>En los últimos meses has visto una aceleración en herramientas y capacidades de inteligencia artificial: asistentes, agentes, automatización de tareas, generación de contenido, análisis de información y nuevas experiencias conversacionales.</p><p>Un líder te pregunta:</p><div class="callout"><b>“Todo el mundo está hablando de AI. ¿Qué crees que va a cambiar realmente en nuestra industria y qué debería significar eso para Yape?”</b></div></div><div class="section"><label>Elevator Speech · mínimo 300 y máximo 1,200 caracteres <span class="required">*</span></label><div class="small">Expectativa: una posición ejecutiva clara que conecte cambio tecnológico → impacto probable → implicancia para Yape → oportunidad/riesgo → recomendación → incertidumbre.</div><textarea id="ai1" data-min="300" style="min-height:220px">${esc(a.speech)}</textarea></div><div class="btns">${btnBack()}${btnNext('Finalizar y ver reporte →')}</div>`);
+ document.getElementById('backBtn').onclick=()=>setStep(5);document.getElementById('nextBtn').onclick=()=>{const n=document.getElementById('ai1').value.trim().length;if(n<300||n>1200){alert('El Elevator Speech debe tener entre 300 y 1,200 caracteres.');return}state.answers.ai={speech:document.getElementById('ai1').value};setStep(7)};
 }
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+function buildPrintableReportHtml(){
+ const a=state.answers;
+ const section=(title,context,questions)=>'<h2>'+esc(title)+'</h2><div class="context"><strong>Contexto del reto</strong><br>'+esc(context)+'</div>'+questions.map(q=>'<div class="qa"><div class="question">'+esc(q[0])+'</div><div class="answer">'+esc(q[1]||'[Sin respuesta]')+'</div></div>').join('');
+ let h='';
+ h+=section('1. Detective del problema','Promos busca aumentar la recurrencia manteniendo una experiencia simple y confiable. Funnel del caso: 100 usuarios entran, 76 encuentran una promo relevante, 63 revisan detalle/condiciones, 58 inician compra, 49 intentan pagar y 46 completan la compra. Solo 32% vuelve al mes siguiente y 28% de los contactos a CX se relaciona con estado, comprobante o uso del beneficio. Los usuarios reportan problemas de descubrimiento, confianza, recordación y claridad.',[
+ ['¿Cuáles son los 2 problemas que investigarías primero?',`Problema 1:\n${a.detective?.p1||''}\n\nProblema 2:\n${a.detective?.p2||''}`],
+ 
+ ['Si solo pudieras pedir 3 datos adicionales, ¿cuáles pedirías y para qué utilizarías cada uno?',a.detective?.more||'']]);
+ h+=section('2. Subasta de oportunidades','El equipo dispone de 100 puntos de capacidad para invertir en Promos. Debe elegir entre varias iniciativas con costos diferentes. Después de cerrar una primera priorización, Marketing informa que Cashback debe incluirse por un compromiso de campaña y no se agrega capacidad.',[
+ ['¿Qué iniciativas seleccionaste y cuánta capacidad utilizaste?',`Iniciativas seleccionadas: ${(a.auction?.sel||[]).join(', ')}\nCapacidad utilizada: ${a.auction?.total??''}/100`],
+ ['Por cada iniciativa seleccionada, ¿qué problema buscas resolver y qué métrica esperarías mover?',a.auction?.just||''],
+ ['¿Qué iniciativas NO harías y por qué?',a.auction?.no||''],
+ ['Cashback ahora es obligatorio y no recibes capacidad adicional. ¿Qué cambias, sacrificas o renegocias y por qué?',a.auction?.change||'']]);
+ h+=section('3. Corta el elefante','El equipo evalúa una apuesta de Personalización de Promos. La experiencia completa excede el tiempo disponible, pero hay 6 semanas para aprender si la personalización puede aumentar la recurrencia. Un sprint equivale a 2 semanas, por lo que existen 3 sprints para el MVP.',[
+ ['Clasifica las capacidades entre MVP, Después y No necesario para este aprendizaje.',`MVP:\n${(a.elephant?.mvp||[]).join(', ')}\n\nDespués:\n${(a.elephant?.later||[]).join(', ')}\n\nNo necesario:\n${(a.elephant?.no||[]).join(', ')}`],
+ ['¿Qué entregarías en cada uno de los 3 sprints?',`Sprint 1:\n${a.elephant?.s1||''}\n\nSprint 2:\n${a.elephant?.s2||''}\n\nSprint 3:\n${a.elephant?.s3||''}`],
+ ['¿Qué necesitas haber aprendido al final de las 6 semanas para decidir entre continuar, iterar o detener la apuesta?',a.elephant?.learn||'']]);
+ h+=section('4. Arma el sistema','Flujo funcional del caso: Promo seleccionada → detalle y condiciones → intención/confirmación de compra → pago → validación → compra confirmada + voucher/código. Escenario evaluado: el usuario presiona Comprar, permanece en “Procesando…” durante 10 segundos y vuelve a presionar Comprar.',[
+ ['¿Qué podría estar ocurriendo?',a.system?.what||''],['¿Qué riesgos identificas?',a.system?.risk||''],['¿Qué preguntas llevarías al Tech Lead?',a.system?.tech||''],['¿Qué debería ver o poder hacer el usuario?',a.system?.ux||'']]);
+ h+=section('5. La trampa de los datos','El equipo prueba una variante de Promos. Recurrencia: Control 32%, Variante 36%. Éxito de compra: 96.5% vs 96.4%. Contactos CX: 2.4% vs 2.5%. Muestra total: 2,000 usuarios y la diferencia de recurrencia no es estadísticamente significativa. Por segmento: Heavy users 55% vs 64%; Casual users 18% vs 18.5%. Marketing propone lanzar por el +4pp observado.',[
+ ['¿Qué decisión tomarías con la evidencia disponible y qué puedes concluir?',a.data?.concl||''],['¿Cambian los segmentos tu lectura?',a.data?.seg||''],['¿Qué harías a continuación?',a.data?.next||'']]);
+ h+=section('6. AI Elevator Speech','Durante los últimos meses se han acelerado asistentes, agentes, automatización, generación de contenido, análisis de información y experiencias conversacionales. Un líder de Yape te pregunta: “Todo el mundo está hablando de AI. ¿Qué crees que va a cambiar realmente en nuestra industria y qué debería significar eso para Yape?”.',[
+ ['Elevator Speech',a.ai?.speech||'']]);
+ return h;
+}
+function renderReport(){
+ const a=state.answers;const lines=[];const add=(t,v)=>{lines.push('='.repeat(72),t.toUpperCase(),'='.repeat(72),v||'[Sin respuesta]','');};
+ lines.push('PRODUCT CHALLENGE — PM YAPE','Candidato: '+state.name,'Email: '+(state.email||'No proporcionado'),'Fecha: '+new Date().toLocaleString('es-PE'),'');
+ add('1. Detective del problema',`Problema 1:\n${a.detective?.p1||''}\n\nProblema 2:\n${a.detective?.p2||''}\n\n3 datos adicionales:\n${a.detective?.more||''}`);
+ add('2. Subasta de oportunidades',`Iniciativas seleccionadas: ${(a.auction?.sel||[]).join(', ')}\nCapacidad total utilizada: ${a.auction?.total??''}/100\n\nProblemas y métricas:\n${a.auction?.just||''}\n\nQué no haría:\n${a.auction?.no||''}\n\nRespuesta al cambio de Cashback:\n${a.auction?.change||''}`);
+ add('3. Corta el elefante',`MVP:\n${(a.elephant?.mvp||[]).join(', ')}\n\nDespués:\n${(a.elephant?.later||[]).join(', ')}\n\nNo necesario:\n${(a.elephant?.no||[]).join(', ')}\n\nSprint 1:\n${a.elephant?.s1||''}\n\nSprint 2:\n${a.elephant?.s2||''}\n\nSprint 3:\n${a.elephant?.s3||''}\n\nQué necesito aprender:\n${a.elephant?.learn||''}`);
+ add('4. Arma el sistema',`Qué podría estar ocurriendo:
+${a.system?.what||''}
+
+Riesgos:
+${a.system?.risk||''}
+
+Preguntas al Tech Lead:
+${a.system?.tech||''}
+
+Experiencia del usuario:
+${a.system?.ux||''}`);
+ add('5. La trampa de los datos',`Conclusión:\n${a.data?.concl||''}\n\nLectura por segmento:\n${a.data?.seg||''}\n\nSiguiente acción:\n${a.data?.next||''}`);
+ add('6. AI Elevator Speech',`Speech:\n${a.ai?.speech||''}`);
+ add('Nota','Este reporte consolida las respuestas del candidato. No contiene calificaciones ni recomendaciones automáticas.');
+ const report=lines.join('\n');
+ app.innerHTML=layout(`<span class="badge">Reporte final</span><h2>${esc(state.name)}, challenge completado.</h2><p class="subtitle">Tus respuestas fueron consolidadas en un reporte PDF.</p><div class="section" style="text-align:center;padding:28px 18px"><div style="font-size:2.6rem;margin-bottom:10px">📄</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:6px">Reporte listo para descargar</div><div class="hint" style="max-width:520px;margin:0 auto">Haz clic en el botón para abrir el reporte en formato imprimible. Desde el diálogo del navegador selecciona <strong>Guardar como PDF</strong>.</div></div><div class="btns"><button class="btn primary" id="pdfBtn">Descargar PDF</button><button class="btn ghost" id="homeBtn">← Volver al inicio</button></div><div class="footer">El PDF contiene únicamente las respuestas ingresadas durante el challenge y no incluye calificaciones.</div></div>`);
+ document.getElementById('homeBtn').onclick=()=>{if(confirm('¿Quieres volver al inicio? Se eliminará todo el progreso y las respuestas de este challenge.')){try{localStorage.removeItem(STORAGE);}catch(e){} state.step=0;state.name='';state.email='';state.answers={};render();initCharCounters();window.scrollTo({top:0,behavior:'smooth'});}};
+ document.getElementById('pdfBtn').onclick=()=>{const w=window.open('','_blank');w.document.write('<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>Product Challenge — '+esc(state.name)+'</title><style>body{font-family:Arial,sans-serif;padding:34px;color:#111;line-height:1.55}h1{font-size:22px;margin:0 0 8px}h2{font-size:16px;margin:28px 0 8px;border-bottom:1px solid #ccc;padding-bottom:6px}p{margin:6px 0}.meta{color:#555;font-size:12px;margin-bottom:24px}.context{background:#f4f4f6;border-left:4px solid #6d28d9;padding:10px 12px;margin:8px 0 16px;font-size:12px}.qa{margin:0 0 18px}.question{font-weight:700;margin:0 0 5px}.answer{white-space:pre-wrap;margin:0 0 16px} .note{margin-top:28px;font-size:11px;color:#666}@page{margin:18mm}@media print{body{padding:0}}</style></head><body><h1>Product Challenge — PM Yape</h1><div class="meta">Candidato: '+esc(state.name)+'<br>Email: '+esc(state.email||'No proporcionado')+'<br>Fecha: '+esc(new Date().toLocaleString('es-PE'))+'</div>'+buildPrintableReportHtml()+'<div class="note">Este reporte consolida las respuestas del candidato. No contiene calificaciones ni recomendaciones automáticas.</div></body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),300)};
+}
+
+resetPersistedState();
+state.step=0;state.name='';state.email='';state.answers={};
+render();initCharCounters();
 </script>
 </body>
 </html>
